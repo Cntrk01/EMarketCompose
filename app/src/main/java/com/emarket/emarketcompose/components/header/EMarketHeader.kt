@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emarket.emarketcompose.R
+import com.emarket.emarketcompose.components.text.EMarketText
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
-
 
 @Composable
 fun EMarketHeader(
@@ -53,11 +53,11 @@ fun EMarketHeader(
             )
         }
 
-        Text(
+        EMarketText(
             modifier = Modifier.padding(start = 15.dp),
             text = headerTitle,
             fontSize = 20.sp,
-            color = colorResource(id = R.color.headerTitleIconColor),
+            textColor = colorResource(id = R.color.headerTitleIconColor),
             fontWeight = FontWeight.Bold
         )
     }
