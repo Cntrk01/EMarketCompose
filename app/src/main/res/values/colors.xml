@@ -2,4 +2,5 @@
 <resources>
     <color name="primaryColor">#1045CA</color>
     <color name="headerTitleIconColor">#FFFFFF</color>
+    <color name="searchColor">#BFBABA</color>
 </resources>
