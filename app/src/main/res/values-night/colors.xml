@@ -3,4 +3,6 @@
     <color name="primaryColor">#CA1010</color>
     <color name="headerTitleIconColor">#FFFFFF</color>
     <color name="searchColor">#BFBABA</color>
+    <color name="cardColor">#B1ACAC</color>
+    <color name="cardTitleColor">#FFFFFF</color>
 </resources> 

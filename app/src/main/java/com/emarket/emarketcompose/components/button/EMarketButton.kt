@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -35,7 +36,10 @@ fun EMarketButton(
         shape = RoundedCornerShape(shape)
     )
     {
-        EMarketText(text = text,fontWeight= fontWeight)
+        EMarketText(
+            text = text,
+            fontWeight= fontWeight,
+            textAlign = TextAlign.Center)
     }
 }
 

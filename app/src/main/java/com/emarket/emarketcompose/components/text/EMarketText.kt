@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
@@ -21,7 +22,8 @@ fun EMarketText(
     fontSize : TextUnit = 16.sp,
     fontWeight: FontWeight = FontWeight.Normal,
     maxLines : Int = 1,
-    minLines : Int = 1
+    minLines : Int = 1,
+    textAlign : TextAlign ?= null
 ) {
 
     Text(
@@ -32,7 +34,8 @@ fun EMarketText(
         fontSize = fontSize,
         maxLines = maxLines,
         minLines = minLines,
-        fontWeight = fontWeight
+        fontWeight = fontWeight,
+        textAlign = textAlign ?: TextAlign.Start
     )
 }
 
