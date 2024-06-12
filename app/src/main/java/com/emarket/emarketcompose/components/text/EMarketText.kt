@@ -1,5 +1,6 @@
 package com.emarket.emarketcompose.components.text
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,7 +25,7 @@ fun EMarketText(
 ) {
 
     Text(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         text = text,
         fontStyle = fontStyle,
         color = textColor,
