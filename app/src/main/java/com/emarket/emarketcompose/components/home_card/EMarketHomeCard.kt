@@ -1,6 +1,5 @@
 package com.emarket.emarketcompose.components.home_card
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -40,7 +39,7 @@ fun EMarketHomeCard(
     price: String,
     description: String,
     clickButton : () -> Unit,
-    clickFavorite : (Boolean) -> Unit
+    clickFavorite : () -> Boolean
 ) {
     val checkImageStatus = remember {
         mutableStateOf(false)
@@ -71,7 +70,7 @@ fun EMarketHomeCard(
                         .align(alignment = Alignment.TopEnd)
                         .clickable {
                             checkImageStatus !=checkImageStatus
-                            clickFavorite(checkImageStatus.value)
+                            clickFavorite()
                         },
                     painter = if (checkImageStatus.value) painterResource(id = R.drawable.star) else painterResource(id = R.drawable.un_star),
                     contentDescription = "Favorite"
@@ -108,7 +107,7 @@ fun PreviewEMarketHomeCard() {
 
             },
             clickFavorite = {
-
+                true
             }
         )
     }
