@@ -5,4 +5,5 @@
     <color name="searchColor">#BFBABA</color>
     <color name="cardColor">#B1ACAC</color>
     <color name="cardTitleColor">#FFFFFF</color>
+    <color name="basketItemRowColor">#E6E4E4</color>
 </resources> 
