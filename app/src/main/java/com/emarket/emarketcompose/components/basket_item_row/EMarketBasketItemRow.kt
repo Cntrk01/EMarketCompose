@@ -1,24 +1,20 @@
 package com.emarket.emarketcompose.components.basket_item_row
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.button.EMarketButton
 import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.utils.dimensionResourceSp
 
 @Composable
 fun EMarketBasketItemRow(
@@ -29,44 +25,42 @@ fun EMarketBasketItemRow(
     minusButton: () -> Unit,
     totalOneItem: String
 ) {
-
     Row(
-        modifier = modifier.background(color = colorResource(id = R.color.basketItemRowColor)),
+        modifier = modifier
+            .background(color = colorResource(id = R.color.basketItemRowColor)),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(start = 10.dp),
+                .padding(start = dimensionResource(id = R.dimen._10dp)),
             horizontalAlignment = Alignment.Start
         ) {
             EMarketText(
                 text = title,
                 textColor = colorResource(id = R.color.cardTitleColor),
-                fontSize = 16.sp
+                fontSize = dimensionResourceSp(R.dimen._16sp)
             )
             EMarketText(
                 text = "$price$",
                 textColor = colorResource(id = R.color.primaryColor),
-                fontSize = 14.sp
+                fontSize = dimensionResourceSp(R.dimen._14sp)
             )
         }
 
         Row(
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 10.dp),
+                .padding(end = dimensionResource(id = R.dimen._10dp)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             EMarketButton(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(2.dp),
+                    .padding(dimensionResource(id = R.dimen._2dp)),
                 text = "-",
                 clickButton = { minusButton() },
-                color = colorResource(
-                    id = R.color.cardColor
-                )
+                color = colorResource(id = R.color.cardColor)
             )
 
             EMarketButton(
@@ -79,7 +73,7 @@ fun EMarketBasketItemRow(
             EMarketButton(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(2.dp),
+                    .padding(dimensionResource(id = R.dimen._2dp)),
                 text = "+",
                 clickButton = { plusButton() },
                 color = colorResource(id =  R.color.cardColor)

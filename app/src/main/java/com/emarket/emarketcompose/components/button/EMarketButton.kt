@@ -9,11 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.text.EMarketText
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
@@ -25,9 +25,9 @@ fun EMarketButton(
     textColor : Color = colorResource(id = R.color.white),
     color : Color = colorResource(id = R.color.primaryColor),
     fontWeight: FontWeight = FontWeight.W300,
-    padding: Dp = 0.dp,
+    padding: Dp = dimensionResource(id = R.dimen._0dp),
     clickButton: () -> Unit,
-    shape : Dp = 5.dp
+    shape : Dp = dimensionResource(id = R.dimen._5dp)
 ) {
     Button(
         modifier = modifier

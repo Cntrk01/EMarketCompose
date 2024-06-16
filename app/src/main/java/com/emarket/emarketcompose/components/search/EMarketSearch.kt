@@ -9,15 +9,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.emarket.emarketcompose.R
 
 @Composable
 fun ElevatedTextField(
     modifier: Modifier = Modifier,
-    searchPadding: Dp = 0.dp,
-    roundedShape: Dp = 10.dp,
+    searchPadding: Dp = dimensionResource(id = R.dimen._0dp),
+    roundedShape: Dp = dimensionResource(id = R.dimen._10dp),
     hint: String,
     onValueChange: (String) -> Unit,
 ) {

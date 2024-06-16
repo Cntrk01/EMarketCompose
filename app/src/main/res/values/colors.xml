@@ -6,6 +6,6 @@
     <color name="cardColor">#D1CCCC</color>
     <color name="cardTitleColor">#000000</color>
     <color name="white">#FFFFFF</color>
-
+    <color name="bottomNavTextColor">#000000</color>
     <color name="basketItemRowColor">#E6E4E4</color>
 </resources>
