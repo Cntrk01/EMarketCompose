@@ -6,18 +6,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun EMarketNavigation(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController,
+    startDestination : String
 ){
-
     NavHost(
         navController = navController,
-        startDestination = NavigationState.Home.route)
+        startDestination = startDestination)
     {
-
         bottomNavigation()
 
     }
@@ -53,7 +51,7 @@ fun NavGraphBuilder.bottomNavigation(){
 
 fun NavGraphBuilder.onBoardingNavigation(){
     navigation(startDestination = "", route = NavigationState.OnBoardingRoute.route){
-        
+
     }
 }
 
