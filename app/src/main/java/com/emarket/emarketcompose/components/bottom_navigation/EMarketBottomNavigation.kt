@@ -3,6 +3,7 @@ package com.emarket.emarketcompose.components.bottom_navigation
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,12 +31,16 @@ fun EMarketBottomNavigation(
     @DrawableRes icon: Int,
     showIconText: String = "",
     badgeStatus: Boolean = false,
-    badgeCount: Int = 0
+    badgeCount: Int = 0,
+    clickItem : () -> Unit
 ) {
     //TODO : Row çağırıldığı yerde verilmeli backgroundda ordan verilmeli
     Column(
         modifier = modifier
-            .padding(dimensionResource(id = R.dimen._5dp)),
+            .padding(dimensionResource(id = R.dimen._5dp))
+            .clickable {
+                clickItem()
+            },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -86,6 +91,9 @@ fun EMarketBottomNavigationPreview() {
         icon = R.drawable.un_star,
         showIconText = "Canturk",
         badgeStatus = true,
-        badgeCount = 15
+        badgeCount = 15,
+        clickItem={
+
+        }
     )
 }
