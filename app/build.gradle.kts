@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id ("kotlin-kapt")
+    id ("com.google.dagger.hilt.android")
+    id ("kotlin-parcelize")
 }
 
 android {
@@ -67,4 +70,37 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.coil.compose)
+
+    //Splash Api
+    implementation (libs.androidx.core.splashscreen)
+
+    //Compose Navigation
+    implementation (libs.androidx.navigation.compose)
+
+    //Dagger Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation (libs.androidx.hilt.navigation.compose) //hiltViewModel() importu sağlıyor
+
+    //Retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+
+    //Coil
+    implementation(libs.coil.compose.v240)
+
+    //Datastore
+    implementation (libs.androidx.datastore.preferences)
+
+    //Compose Foundation
+    implementation (libs.androidx.foundation)
+
+    //Accompanist
+    implementation (libs.accompanist.systemuicontroller)
+
+    //Room
+    implementation (libs.androidx.room.runtime)
+    implementation (libs.androidx.room.ktx)
+    annotationProcessor (libs.androidx.room.compiler)
+    kapt (libs.androidx.room.compiler)
 }
