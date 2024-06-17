@@ -1,6 +1,5 @@
 package com.emarket.emarketcompose.components.button
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -31,7 +30,6 @@ fun EMarketButton(
 ) {
     Button(
         modifier = modifier
-            .fillMaxWidth()
             .padding(padding),
         colors = ButtonDefaults.buttonColors(color),
         onClick = { clickButton() },
