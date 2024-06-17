@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.onboaring
+package com.emarket.emarketcompose.onboarding
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnBoarding(
-    onBoardingFinish: (Boolean) -> Unit,
+    onBoardingFinish: () -> Unit,
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ) {
     val pagerState = rememberPagerState(initialPage = 0) {
@@ -40,8 +40,8 @@ fun OnBoarding(
                 pagerState = pagerState,
                 buttonState = buttonState,
                 coroutineScope = coroutineScope,
-                onBoardingFinish = {finishValue->
-                    onBoardingFinish(finishValue)
+                onBoardingFinish = {
+                    onBoardingFinish()
                 }
             )
         }
