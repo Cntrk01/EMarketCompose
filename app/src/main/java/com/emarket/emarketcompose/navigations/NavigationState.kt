@@ -1,6 +1,7 @@
 package com.emarket.emarketcompose.navigations
 
 sealed class NavigationState(val route : String) {
+    data object OnBoarding : NavigationState("OnBoardingPage")
     data object Home : NavigationState("Home")
     data object Basket : NavigationState("Basket")
     data object Favorite : NavigationState("Favorite")
