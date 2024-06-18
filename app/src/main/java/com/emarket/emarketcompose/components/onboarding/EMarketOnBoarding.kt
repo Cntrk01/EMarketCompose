@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.sp
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.button.EMarketButton
 import com.emarket.emarketcompose.components.onboarding.indicator.EMarketIndicator
-import com.emarket.emarketcompose.onboarding.OnBoardingPage
-import com.emarket.emarketcompose.onboarding.onBoardingPages
+import com.emarket.emarketcompose.presentation.onboarding.OnBoardingPage
+import com.emarket.emarketcompose.presentation.onboarding.onBoardingPages
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

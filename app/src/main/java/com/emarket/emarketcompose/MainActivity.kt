@@ -18,7 +18,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.navigation.compose.rememberNavController
 import com.emarket.emarketcompose.navigations.EMarketNavigation
 import com.emarket.emarketcompose.navigations.NavigationState
-import com.emarket.emarketcompose.onboarding.OnBoardingViewModel
+import com.emarket.emarketcompose.presentation.onboarding.OnBoardingViewModel
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint

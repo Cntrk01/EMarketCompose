@@ -26,7 +26,7 @@ import com.emarket.emarketcompose.utils.dimensionResourceSp
 fun EMarketHeader(
     modifier: Modifier = Modifier,
     headerTitle: String = "E-Market",
-    headerPadding: Dp = dimensionResource(id = R.dimen._5dp),
+    headerPadding: Dp = dimensionResource(id = R.dimen._10dp),
     headerType: HeaderType = HeaderType.SIMPLE,
     backClick: () -> Unit = {}
 ) {
