@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.Dp
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.text.EMarketText
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EMarketSearch(
     modifier: Modifier = Modifier,

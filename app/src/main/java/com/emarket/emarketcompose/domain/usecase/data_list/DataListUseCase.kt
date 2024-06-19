@@ -10,16 +10,19 @@ import javax.inject.Inject
 class DataListUseCase @Inject constructor(
     private val eMarketRemoteRepositoryImpl: EMarketRemoteRepositoryImpl
 ) {
-    private var index = 0
-    private var totalPageItem = 0
+    private var fetchPageItem = 0
 
-    suspend fun getData(pageIndex: Int): Flow<Response<List<EMarketItem>>> {
-        totalPageItem = pageIndex * Constants.PAGE_SIZE
+    suspend fun getData(
+        pageIndex: Int,
+        listSize: (Int) -> Unit
+    ): Flow<Response<List<EMarketItem>>> {
+        fetchPageItem = pageIndex * Constants.PAGE_SIZE
 
-        val totalItem = eMarketRemoteRepositoryImpl.getData(index = index, totalPageItem = totalPageItem)
+        val responseFlow = eMarketRemoteRepositoryImpl.getData(fetchPageItem)
+        { maxSize ->
+            listSize(maxSize)
+        }
 
-        index = totalPageItem
-
-        return totalItem
+        return responseFlow
     }
 }

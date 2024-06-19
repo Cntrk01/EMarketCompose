@@ -64,8 +64,8 @@ private fun setThemeColor(){
     val isSystemInDarkMode = isSystemInDarkTheme()
     val systemController = rememberSystemUiController()
     val systemTheme = if (isSystemInDarkMode)
-                           colorResource(id = R.color.background)
-                      else Color.Transparent
+                           colorResource(id = R.color.primaryColor)
+                      else colorResource(id = R.color.primaryColor)
     SideEffect {
         systemController.setSystemBarsColor(
             color = systemTheme,
