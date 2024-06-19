@@ -18,7 +18,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.navigation.compose.rememberNavController
 import com.emarket.emarketcompose.navigations.EMarketNavigation
 import com.emarket.emarketcompose.navigations.NavigationState
-import com.emarket.emarketcompose.onboarding.OnBoardingViewModel
+import com.emarket.emarketcompose.presentation.onboarding.OnBoardingViewModel
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,8 +64,8 @@ private fun setThemeColor(){
     val isSystemInDarkMode = isSystemInDarkTheme()
     val systemController = rememberSystemUiController()
     val systemTheme = if (isSystemInDarkMode)
-                           colorResource(id = R.color.background)
-                      else Color.Transparent
+                           colorResource(id = R.color.primaryColor)
+                      else colorResource(id = R.color.primaryColor)
     SideEffect {
         systemController.setSystemBarsColor(
             color = systemTheme,

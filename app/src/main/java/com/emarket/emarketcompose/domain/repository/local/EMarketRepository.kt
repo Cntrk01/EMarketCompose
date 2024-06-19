@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.domain.repository
+package com.emarket.emarketcompose.domain.repository.local
 
 import kotlinx.coroutines.flow.Flow
 

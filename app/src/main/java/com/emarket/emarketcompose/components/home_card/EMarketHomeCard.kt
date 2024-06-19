@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -33,61 +32,80 @@ import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 fun EMarketHomeCard(
     modifier: Modifier = Modifier,
     shape: Dp = dimensionResource(id = R.dimen._5dp),
-    elevation: Dp =dimensionResource(id = R.dimen._5dp),
-    colors: Int = R.color.cardColor,
+    elevation: Dp = dimensionResource(id = R.dimen._2dp),
     image: String,
     price: String,
     description: String,
-    clickButton : () -> Unit,
-    clickFavorite : () -> Boolean
+    colors: Int = R.color.cardColor,
+    clickButton: () -> Unit,
+    clickFavorite: () -> Boolean,
 ) {
     val checkImageStatus = remember {
         mutableStateOf(false)
     }
+
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = dimensionResource(id = R.dimen._10dp)),
         elevation = CardDefaults.elevatedCardElevation(elevation),
         shape = RoundedCornerShape(shape),
         colors = CardDefaults.cardColors(colorResource(id = colors))
     ) {
         Column(
             modifier = modifier
-                .padding(dimensionResource(id = R.dimen._20dp))
+                .padding(dimensionResource(id = R.dimen._5dp))
                 .fillMaxWidth()
         ) {
-
             Box {
                 AsyncImage(
-                    modifier = Modifier.height(dimensionResource(id = R.dimen._200dp)),
                     model = image ?: R.drawable.empty_image,
                     contentDescription = "image"
                 )
 
                 Image(
                     modifier = Modifier
-                        .fillMaxSize(fraction = 0.15f)
+                        .fillMaxSize(fraction = 0.30f)
                         .padding(dimensionResource(id = R.dimen._10dp))
                         .align(alignment = Alignment.TopEnd)
                         .clickable {
-                            checkImageStatus !=checkImageStatus
+                            checkImageStatus != checkImageStatus
                             clickFavorite()
                         },
-                    painter = if (checkImageStatus.value) painterResource(id = R.drawable.star) else painterResource(id = R.drawable.un_star),
+                    painter = if (checkImageStatus.value) painterResource(id = R.drawable.star) else painterResource(
+                        id = R.drawable.un_star
+                    ),
                     contentDescription = "Favorite"
                 )
             }
 
-            Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._10dp), bottom = dimensionResource(id = R.dimen._10dp)))
+            Spacer(
+                modifier = Modifier.padding(
+                    top = dimensionResource(id = R.dimen._5dp),
+                    bottom = dimensionResource(id = R.dimen._10dp)
+                )
+            )
 
             EMarketText(text = price, textColor = colorResource(id = R.color.primaryColor))
 
-            Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._10dp), bottom = dimensionResource(id = R.dimen._10dp)))
+            Spacer(
+                modifier = Modifier.padding(
+                    top = dimensionResource(id = R.dimen._5dp),
+                    bottom = dimensionResource(id = R.dimen._10dp)
+                )
+            )
 
             EMarketText(text = description, textColor = colorResource(id = R.color.cardTitleColor))
 
-            Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._10dp), bottom = dimensionResource(id = R.dimen._10dp)))
+            Spacer(
+                modifier = Modifier.padding(
+                    top = dimensionResource(id = R.dimen._5dp),
+                    bottom = dimensionResource(id = R.dimen._10dp)
+                )
+            )
 
             EMarketButton(
+                modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.add_to_card),
                 clickButton = { clickButton() }
             )
@@ -100,9 +118,9 @@ fun EMarketHomeCard(
 fun PreviewEMarketHomeCard() {
     EMarketComposeTheme {
         EMarketHomeCard(
-            image = "R.drawable.ic_launcher_background",
-            price = "15.000",
-            description = "Iphone 13 Pro Max 256Gb",
+            image =  R.drawable.star.toString(),
+            description = "Description",
+            price = "Price",
             clickButton = {
 
             },

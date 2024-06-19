@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.onboarding
+package com.emarket.emarketcompose.presentation.onboarding
 
 import androidx.annotation.DrawableRes
 import com.emarket.emarketcompose.R

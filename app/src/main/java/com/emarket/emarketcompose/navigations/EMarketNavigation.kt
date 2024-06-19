@@ -6,7 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.emarket.emarketcompose.onboarding.OnBoarding
+import com.emarket.emarketcompose.presentation.home.HomePage
+import com.emarket.emarketcompose.presentation.onboarding.OnBoarding
 
 @Composable
 fun EMarketNavigation(
@@ -32,7 +33,7 @@ fun NavGraphBuilder.bottomNavigation() {
         route = NavigationState.AppRoute.route
     ) {
         composable(route = NavigationState.Home.route) {
-
+            HomePage()
         }
 
         composable(route = NavigationState.Basket.route) {
