@@ -33,6 +33,7 @@ fun HomePage(
     var firstLoadings = remember { true }
     var bottomLoading = remember { true }
 
+
     Column {
         EMarketHeader(headerTitle = "E-Market App")
 
@@ -80,7 +81,7 @@ fun HomePage(
                         homeDataList = homeDataList,
                         homeDataListSize = homeDataListSize,
                         viewModel = viewModel,
-                        isBottomLoad = bottomLoading
+                        isBottomLoad = bottomLoading,
                     )
                 }
             }
@@ -90,11 +91,12 @@ fun HomePage(
 
 @Composable
 fun HomeItemLayout(
-    homeDataList : List<EMarketItem>,
-    homeDataListSize : Int,
+    homeDataList: List<EMarketItem>,
+    homeDataListSize: Int,
     viewModel: HomeViewModel,
-    isBottomLoad : Boolean,
-){
+    isBottomLoad: Boolean,
+
+) {
     var bottomLoading = remember { isBottomLoad }
 
     LazyVerticalGrid(
@@ -105,7 +107,7 @@ fun HomeItemLayout(
                 //homeDataList.size da elimde var olan datayı dönüyor.En son datayı çekince bu değerler birbirine eşit olacağı için if bloğu çalışmıyor böylelikle apiye artık istek atılmıyor
                 if (index == homeDataList.size - 1 && homeDataListSize != homeDataList.size) {
                     viewModel.loadMoreDataList()
-                    bottomLoading=true
+                    bottomLoading = true
                 }
 
                 EMarketHomeCard(
