@@ -32,19 +32,22 @@ fun EMarketBottomNavigation(
     showIconText: String = "",
     badgeStatus: Boolean = false,
     badgeCount: Int = 0,
-    clickItem : () -> Unit
+    selectedItem : Int,
+    clickItem : (Int) -> Unit
 ) {
     //TODO : Row çağırıldığı yerde verilmeli backgroundda ordan verilmeli
     Column(
         modifier = modifier
             .padding(dimensionResource(id = R.dimen._5dp))
             .clickable {
-                clickItem()
+                clickItem(selectedItem)
             },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box {
+        Box (
+            contentAlignment = Alignment.Center
+        ){
             Image(
                 painter = painterResource(id = icon),
                 contentDescription = "Icon"
@@ -92,8 +95,7 @@ fun EMarketBottomNavigationPreview() {
         showIconText = "Canturk",
         badgeStatus = true,
         badgeCount = 15,
-        clickItem={
-
-        }
+        selectedItem = 5,
+        clickItem={}
     )
 }
