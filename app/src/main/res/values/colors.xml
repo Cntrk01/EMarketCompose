@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="black">#000000</color>
     <color name="primaryColor">#1045CA</color>
     <color name="headerTitleIconColor">#FFFFFF</color>
     <color name="searchColor">#BFBABA</color>
@@ -8,6 +9,7 @@
     <color name="white">#FFFFFF</color>
     <color name="bottomNavTextColor">#000000</color>
     <color name="basketItemRowColor">#E6E4E4</color>
+    <color name="bottomNavigationColor">#FFFFFF</color>
 
     <color name="background">#FFFFFF</color>
 </resources>

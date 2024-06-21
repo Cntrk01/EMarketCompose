@@ -2,8 +2,6 @@ package com.emarket.emarketcompose.presentation.bottomnavigation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +13,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -25,15 +22,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.bottom_navigation.EMarketBottomNavigation
+import com.emarket.emarketcompose.components.header.EMarketHeader
 import com.emarket.emarketcompose.navigations.NavigationState
 import com.emarket.emarketcompose.presentation.basket.BasketPage
+import com.emarket.emarketcompose.presentation.favorite.FavoritePage
+import com.emarket.emarketcompose.presentation.history.HistoryPage
 import com.emarket.emarketcompose.presentation.home.HomePage
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BottomNavPage(
-    modifier: Modifier = Modifier,
-) {
+fun BottomNavPage() {
     val bottomNavList = listOf(
         BottomNavState.Home,
         BottomNavState.Basket,
@@ -42,6 +40,7 @@ fun BottomNavPage(
     )
 
     val navController = rememberNavController()
+    //backStack = NavController'ın geri yığınındaki (back stack) mevcut girişin State (durum) olarak gözlemlenmesini sağla
     val backStackState = navController.currentBackStackEntryAsState().value
     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
 
@@ -76,30 +75,32 @@ fun BottomNavPage(
                         )
                 ) {
                     bottomNavList.forEachIndexed { index, bottomNavState ->
-                        Column(
-                            modifier = modifier
-                                .weight(1f)
-                                .padding(dimensionResource(id = R.dimen._15dp)),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
 
-                            EMarketBottomNavigation(
-                                icon = bottomNavState.icon,
-                                selectedItem = index
-                            ) {
-                                if (index != selectedItem) {
-                                    navController.navigate(bottomNavState.route)
-                                }
+                        EMarketBottomNavigation(
+                            modifier = Modifier
+                                .weight(1f)
+                                .background(color = colorResource(id = R.color.primaryColor))
+                                .padding(dimensionResource(id = R.dimen._5dp)),
+                            icon = bottomNavState.icon,
+                            showIconText = bottomNavState.route,
+                            selectedItemPosition = index,
+                            isSelected = index == selectedItem,
+                        ) {
+                            if (index != selectedItem) {
+                                navController.navigate(bottomNavState.route)
                             }
                         }
                     }
                 }
             }
-        }
+        },
+//        topBar = {
+//            EMarketHeader()
+//        }
     ) { paddingValues ->
 
         NavHost(
+            modifier = Modifier.padding(paddingValues),
             navController = navController,
             startDestination = NavigationState.Home.route
         ) {
@@ -112,11 +113,11 @@ fun BottomNavPage(
             }
 
             composable(route = NavigationState.Favorite.route) {
-                // FavoritePage() // Implement your FavoritePage here
+                FavoritePage() // Implement your FavoritePage here
             }
 
             composable(route = NavigationState.History.route) {
-                // HistoryPage() // Implement your HistoryPage here
+                HistoryPage() // Implement your HistoryPage here
             }
 
 
