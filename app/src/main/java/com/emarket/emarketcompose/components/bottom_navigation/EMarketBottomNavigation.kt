@@ -1,18 +1,21 @@
 package com.emarket.emarketcompose.components.bottom_navigation
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,55 +35,94 @@ fun EMarketBottomNavigation(
     showIconText: String = "",
     badgeStatus: Boolean = false,
     badgeCount: Int = 0,
-    clickItem : () -> Unit
+    selectedItemPosition: Int,
+    isSelected: Boolean,
+    clickItem: (Int) -> Unit
 ) {
-    //TODO : Row çağırıldığı yerde verilmeli backgroundda ordan verilmeli
+    val interactionSource = remember { MutableInteractionSource() }
+
     Column(
         modifier = modifier
-            .padding(dimensionResource(id = R.dimen._5dp))
-            .clickable {
-                clickItem()
-            },
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box {
-            Image(
-                painter = painterResource(id = icon),
-                contentDescription = "Icon"
-            )
-            if (badgeStatus) {
-                Box(
-                    modifier = Modifier
-                        .padding(
-                            top = dimensionResource(id = R.dimen._15dp),
-                            end = dimensionResource(id = R.dimen._15dp)
-                        )
-                        .size(dimensionResource(id = R.dimen._35dp))
-                        .background(Color.Red, CircleShape)
-                        .align(Alignment.TopEnd),
-                    contentAlignment = Alignment.Center
-                ) {
-                    EMarketText(
-                        text = badgeCount.toString(),
-                        textColor = Color.White,
-                        fontSize = dimensionResourceSp(id = R.dimen._18sp),
-                    )
-                }
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                clickItem(selectedItemPosition)
             }
-        }
+            .padding(dimensionResource(id = R.dimen._5dp))
+            .fillMaxWidth()
+            .background(
+                color = if (isSelected) colorResource(id = R.color.white)
+                else Color.Transparent,
+                CircleShape
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
 
-        Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._10dp)))
+        IconWithBadge(
+            icon = icon,
+            badgeStatus = badgeStatus,
+            badgeCount = badgeCount,
+            iconTint = colorResource(id = R.color.black)
+        )
 
         if (showIconText.isNotEmpty()) {
             EMarketText(
                 modifier = Modifier.wrapContentWidth(),
                 text = showIconText,
                 textAlign = TextAlign.Center,
-                fontSize = dimensionResourceSp(id = R.dimen._22sp),
-                textColor = colorResource(id = R.color.bottomNavTextColor)
+                fontSize = dimensionResourceSp(id = R.dimen._14sp),
+                textColor = colorResource(id = R.color.black)
             )
         }
+    }
+}
+
+@Composable
+fun IconWithBadge(
+    @DrawableRes icon: Int,
+    badgeStatus: Boolean,
+    badgeCount: Int,
+    iconTint : Color
+) {
+    Box(
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = icon),
+            contentDescription = "Icon",
+            tint = iconTint
+        )
+        if (badgeStatus) {
+            Badge(
+                count = badgeCount,
+                modifier = Modifier
+                    .offset(
+                        x = dimensionResource(id = R.dimen._13dp),
+                        y = (-dimensionResource(id = R.dimen._10dp))
+                    )
+            )
+        }
+    }
+}
+
+@Composable
+fun Badge(
+    count: Int,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .size(dimensionResource(id = R.dimen._24dp))
+            .background(Color.Red, CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        EMarketText(
+            text = count.toString(),
+            textColor = Color.White,
+            fontSize = dimensionResourceSp(id = R.dimen._14sp)
+        )
     }
 }
 
@@ -92,8 +134,8 @@ fun EMarketBottomNavigationPreview() {
         showIconText = "Canturk",
         badgeStatus = true,
         badgeCount = 15,
-        clickItem={
-
-        }
+        selectedItemPosition = 5,
+        isSelected = true,
+        clickItem = {}
     )
 }
