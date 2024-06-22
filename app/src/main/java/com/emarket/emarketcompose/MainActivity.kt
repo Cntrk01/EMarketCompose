@@ -36,12 +36,6 @@ class MainActivity : ComponentActivity() {
 
                 setThemeColor()
 
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color = colorResource(id = R.color.background))
-                ) { innerPadding ->
-
                     val navigationController = rememberNavController()
                     val routeStatus = onBoardingViewModel.readStatus.collectAsState()
 
@@ -52,7 +46,6 @@ class MainActivity : ComponentActivity() {
                             onBoardingViewModel.updateDataStore()
                         }
                     )
-                }
             }
         }
     }

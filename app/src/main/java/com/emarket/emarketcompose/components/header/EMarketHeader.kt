@@ -1,7 +1,6 @@
 package com.emarket.emarketcompose.components.header
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +19,7 @@ import androidx.compose.ui.unit.Dp
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.text.EMarketText
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
+import com.emarket.emarketcompose.utils.customClickable
 import com.emarket.emarketcompose.utils.dimensionResourceSp
 
 @Composable
@@ -41,7 +41,7 @@ fun EMarketHeader(
         if (headerType == HeaderType.MULTI) {
             Icon(
                 modifier = Modifier
-                    .clickable {
+                    .customClickable {
                         backClick()
                     }
                     .padding(start = dimensionResource(id = R.dimen._5dp)),

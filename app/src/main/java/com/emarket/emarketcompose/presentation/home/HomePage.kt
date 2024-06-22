@@ -26,16 +26,16 @@ import com.emarket.emarketcompose.utils.getScreenWidthInDp
 
 @Composable
 fun HomePage(
-    viewModel: HomeViewModel = hiltViewModel()
+    homeState: HomeState,
+    viewModel: HomeViewModel,
+    clickDetail: (EMarketItem) -> Unit
 ) {
-    val homeState = viewModel.homeDataState.collectAsState(HomeState())
     var searchText = remember { "" }
     var firstLoadings = remember { true }
     var bottomLoading = remember { true }
 
 
     Column {
-        EMarketHeader(headerTitle = "E-Market App")
 
         Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._10dp)))
 
@@ -45,7 +45,7 @@ fun HomePage(
                 end = dimensionResource(id = R.dimen._10dp)
             )
         ) {
-            homeState.value.apply {
+            homeState.apply {
                 if (homeLoading) {
                     if (firstLoadings) {
                         Box(
@@ -82,6 +82,9 @@ fun HomePage(
                         homeDataListSize = homeDataListSize,
                         viewModel = viewModel,
                         isBottomLoad = bottomLoading,
+                        clickDetail = {
+                            clickDetail(it)
+                        }
                     )
                 }
             }
@@ -95,7 +98,7 @@ fun HomeItemLayout(
     homeDataListSize: Int,
     viewModel: HomeViewModel,
     isBottomLoad: Boolean,
-
+    clickDetail: (EMarketItem) -> Unit
 ) {
     var bottomLoading = remember { isBottomLoad }
 
@@ -124,6 +127,9 @@ fun HomeItemLayout(
                         // Veritabanına yazma işlemi yapılacak
                         false
                     },
+                    clickDetail = {
+                        clickDetail(homeDataList[index])
+                    }
                 )
             }
 
