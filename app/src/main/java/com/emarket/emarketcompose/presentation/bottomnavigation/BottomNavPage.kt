@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,6 +31,7 @@ import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.bottom_navigation.EMarketBottomNavigation
 import com.emarket.emarketcompose.components.header.EMarketHeader
 import com.emarket.emarketcompose.components.header.HeaderType
+import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.navigations.NavigationState
 import com.emarket.emarketcompose.presentation.basket.BasketPage
 import com.emarket.emarketcompose.presentation.detail.DetailPage
@@ -38,6 +40,8 @@ import com.emarket.emarketcompose.presentation.history.HistoryPage
 import com.emarket.emarketcompose.presentation.home.HomePage
 import com.emarket.emarketcompose.presentation.home.HomeViewModel
 import com.emarket.emarketcompose.utils.Constants.BOTTOM_NAV_ITEMS
+import com.emarket.emarketcompose.utils.navigateToDetails
+import com.emarket.emarketcompose.utils.navigateToTap
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -98,7 +102,10 @@ fun BottomNavPage() {
                     homeState = state,
                     viewModel = homeViewModel,
                     clickDetail = {
-                        navController.navigate(NavigationState.Detail.route)
+                        navigateToDetails(
+                            navController = navController,
+                            eMarketItem = it
+                        )
                     })
             }
 
@@ -204,7 +211,11 @@ fun BottomBarFunc(
                     isSelected = index == selectedItem,
                 ) {
                     if (index != selectedItem) {
-                        navController.navigate(bottomNavState.route)
+                        navigateToTap(
+                            navController = navController,
+                            route = bottomNavState.route
+                        )
+                        //navController.navigate(bottomNavState.route)
                     }
                 }
             }
