@@ -173,7 +173,7 @@ fun TopBarFunc(currentRoute: String?, navController: NavHostController) {
 
         else -> {
             EMarketHeader(
-                headerTitle = "E-Market",
+                headerTitle = "Home",
                 headerType = HeaderType.SIMPLE
             )
         }

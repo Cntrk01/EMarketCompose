@@ -14,6 +14,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.emarket.emarketcompose.navigations.EMarketNavigation
 import com.emarket.emarketcompose.navigations.NavigationState
@@ -31,17 +32,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge() //bu full screen yapıyor ve alttaki butonlar navigation barın altına taşıyordu ondan dolayı bunu commentledim
 
+        installSplashScreen().apply {
+            onBoardingViewModel.splashCondition
+        }
+
         setContent {
             EMarketComposeTheme {
 
                 setThemeColor()
 
                     val navigationController = rememberNavController()
-                    val routeStatus = onBoardingViewModel.readStatus.collectAsState()
+                    val routeStatus = onBoardingViewModel.startDestination
 
                     EMarketNavigation(
                         navController = navigationController,
-                        startDestination = if (routeStatus.value) NavigationState.AppRoute.route else NavigationState.OnBoardingRoute.route,
+                        startDestination = routeStatus,
                         onBoardingFinish = {
                             onBoardingViewModel.updateDataStore()
                         }
