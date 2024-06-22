@@ -39,6 +39,7 @@ fun EMarketHomeCard(
     colors: Int = R.color.cardColor,
     clickButton: () -> Unit,
     clickFavorite: () -> Boolean,
+    clickDetail : () -> Unit = {}
 ) {
     val checkImageStatus = remember {
         mutableStateOf(false)
@@ -47,7 +48,10 @@ fun EMarketHomeCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = dimensionResource(id = R.dimen._10dp)),
+            .padding(bottom = dimensionResource(id = R.dimen._10dp))
+            .clickable {
+                clickDetail()
+            },
         elevation = CardDefaults.elevatedCardElevation(elevation),
         shape = RoundedCornerShape(shape),
         colors = CardDefaults.cardColors(colorResource(id = colors))
@@ -79,30 +83,15 @@ fun EMarketHomeCard(
                 )
             }
 
-            Spacer(
-                modifier = Modifier.padding(
-                    top = dimensionResource(id = R.dimen._5dp),
-                    bottom = dimensionResource(id = R.dimen._10dp)
-                )
-            )
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen._5dp),))
 
             EMarketText(text = price, textColor = colorResource(id = R.color.primaryColor))
 
-            Spacer(
-                modifier = Modifier.padding(
-                    top = dimensionResource(id = R.dimen._5dp),
-                    bottom = dimensionResource(id = R.dimen._10dp)
-                )
-            )
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen._5dp),))
 
             EMarketText(text = description, textColor = colorResource(id = R.color.cardTitleColor))
 
-            Spacer(
-                modifier = Modifier.padding(
-                    top = dimensionResource(id = R.dimen._5dp),
-                    bottom = dimensionResource(id = R.dimen._10dp)
-                )
-            )
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen._5dp),))
 
             EMarketButton(
                 modifier = Modifier.fillMaxWidth(),

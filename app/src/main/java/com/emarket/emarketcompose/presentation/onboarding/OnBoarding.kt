@@ -18,7 +18,7 @@ fun OnBoarding(
     onBoardingFinish: () -> Unit,
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ) {
-    val pagerState = rememberPagerState(initialPage = 0) {
+    val pagerState = rememberPagerState {
         onBoardingPages.size
     }
 

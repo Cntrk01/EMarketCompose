@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(private val manageAppEntryUseCase: ManageAppEntryUseCase) : ViewModel() {
 
-    private val _readStatus : MutableStateFlow<Boolean> = MutableStateFlow(true)
+    private val _readStatus : MutableStateFlow<Boolean> = MutableStateFlow(false)
     val readStatus : StateFlow<Boolean> get() = _readStatus
 
     init {

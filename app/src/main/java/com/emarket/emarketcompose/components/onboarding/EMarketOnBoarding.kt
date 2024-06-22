@@ -49,7 +49,7 @@ fun EMarketOnBoarding(
     coroutineScope: CoroutineScope,
     onBoardingFinish: () -> Unit
 ) {
-    val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
     Column(
         modifier = modifier
     ) {
