@@ -1,6 +1,7 @@
 package com.emarket.emarketcompose.domain.repository.model
 
 import com.emarket.emarketcompose.data.dto.EMarketResponseItem
+import java.io.Serializable
 
 data class EMarketItem(
     val image:String,
@@ -8,7 +9,7 @@ data class EMarketItem(
     val price: String,
     val itemId: String,
     val description: String,
-)
+) : Serializable
 
 fun EMarketResponseItem.toEMarketItem() : EMarketItem{
     return EMarketItem(
