@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,7 +29,6 @@ import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.bottom_navigation.EMarketBottomNavigation
 import com.emarket.emarketcompose.components.header.EMarketHeader
 import com.emarket.emarketcompose.components.header.HeaderType
-import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.navigations.NavigationState
 import com.emarket.emarketcompose.presentation.basket.BasketPage
 import com.emarket.emarketcompose.presentation.detail.DetailPage
@@ -96,7 +93,7 @@ fun BottomNavPage() {
         ) {
             composable(route = NavigationState.Home.route) {
                 val homeViewModel: HomeViewModel = hiltViewModel()
-                val state = homeViewModel.homeDataState.collectAsState().value
+                val state = homeViewModel.homeDataState
 
                 HomePage(
                     homeState = state,

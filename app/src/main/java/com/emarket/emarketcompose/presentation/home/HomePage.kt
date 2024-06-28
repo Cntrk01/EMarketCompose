@@ -9,31 +9,49 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.header.EMarketHeader
 import com.emarket.emarketcompose.components.home_card.EMarketHomeCard
 import com.emarket.emarketcompose.components.loading_status.EMarketLoading
 import com.emarket.emarketcompose.components.search.EMarketSearch
 import com.emarket.emarketcompose.components.text.EMarketText
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.utils.getScreenWidthInDp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomePage(
-    homeState: HomeState,
+    homeState: StateFlow<HomeState>,
     viewModel: HomeViewModel,
     clickDetail: (EMarketItem) -> Unit
 ) {
     var searchText = remember { "" }
     var firstLoadings = remember { true }
     var bottomLoading = remember { true }
+    var isSearching = remember { false }
 
+    var dataState by remember { mutableStateOf(HomeState()) }
+
+    DisposableEffect(homeState) {
+        val job = viewModel.viewModelScope.launch(Dispatchers.IO) {
+            homeState.collect { value ->
+                dataState = value
+            }
+        }
+        onDispose {
+            job.cancel()
+        }
+    }
 
     Column {
 
@@ -45,7 +63,7 @@ fun HomePage(
                 end = dimensionResource(id = R.dimen._10dp)
             )
         ) {
-            homeState.apply {
+            dataState.apply {
                 if (homeLoading) {
                     if (firstLoadings) {
                         Box(
