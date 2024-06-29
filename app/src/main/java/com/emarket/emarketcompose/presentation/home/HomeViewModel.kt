@@ -1,6 +1,5 @@
 package com.emarket.emarketcompose.presentation.home
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
@@ -18,12 +17,13 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val dataListUseCase: DataListUseCase
 ) : ViewModel() {
+
     private var maxDataListSize = 0
     private val _homeDataState = MutableStateFlow(HomeState())
     val homeDataState: StateFlow<HomeState> get() = _homeDataState
 
     private var pageIndex = 0
-    private var homeDataList = mutableStateListOf<EMarketItem>()
+    private var cacheHomeDataList = listOf<EMarketItem>()
 
     init {
         getDataList(pageIndex = pageIndex)
@@ -56,13 +56,13 @@ class HomeViewModel @Inject constructor(
                     }
 
                     is Response.Success -> {
-                        homeDataList += response.data ?: emptyList()
+                        cacheHomeDataList += response.data ?: emptyList()
 
                         _homeDataState.update { state ->
                             state.copy(
                                 homeLoading = false,
                                 homeError = "",
-                                homeDataList = homeDataList,
+                                homeDataList = cacheHomeDataList,
                                 homeDataListSize = maxDataListSize
                             )
                         }
@@ -81,5 +81,32 @@ class HomeViewModel @Inject constructor(
     fun loadMoreDataList() {
         pageIndex += 1
         getDataList(pageIndex = pageIndex)
+    }
+
+    fun searchItem(query: String)  {
+
+        _homeDataState.update { currentState ->
+            if (query.isEmpty()) {
+                currentState.copy(
+                    homeDataList = cacheHomeDataList,
+                    homeSearchList = null
+                )
+            } else {
+
+                if (cacheHomeDataList.isEmpty()) {
+                    _homeDataState.value.homeDataList?.let { cacheHomeDataList = it }
+                }
+
+                val searchItem = cacheHomeDataList.filter { item ->
+                    item.name.contains(query, ignoreCase = true) ||
+                    item.description.contains(query, ignoreCase = true)
+                }
+
+                currentState.copy(
+                    homeSearchList = searchItem,
+                    homeDataList = null
+                )
+            }
+        }
     }
 }
