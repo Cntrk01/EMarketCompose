@@ -1,5 +1,6 @@
 package com.emarket.emarketcompose.presentation.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,16 +31,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun HomePage(
     homeState: StateFlow<HomeState>,
     viewModel: HomeViewModel,
     clickDetail: (EMarketItem) -> Unit
 ) {
-    var searchText = remember { "" }
     var firstLoadings = remember { true }
+    val checkFirstLoading = remember { derivedStateOf { firstLoadings } }
     var bottomLoading = remember { true }
-    var isSearching = remember { false }
+    val isSearching = remember { false }
 
     var dataState by remember { mutableStateOf(HomeState()) }
 
@@ -63,9 +66,18 @@ fun HomePage(
                 end = dimensionResource(id = R.dimen._10dp)
             )
         ) {
+
             dataState.apply {
-                if (homeLoading) {
-                    if (firstLoadings) {
+                if(!homeLoading){
+                    EMarketSearch(
+                        onValueChange = {
+                            viewModel.searchItem(it)
+                        },
+                        onSearch = {}
+                    )
+                }
+                when {
+                    homeLoading && checkFirstLoading.value -> {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize(),
@@ -75,35 +87,39 @@ fun HomePage(
                         }
                         firstLoadings = false
                     }
-                }
-                if (homeError.isNotEmpty()) {
-                    EMarketText(text = homeError)
+                    homeError.isNotEmpty() -> {
+                        EMarketText(text = homeError)
+                    }
+                    homeDataList?.isNotEmpty() == true && !isSearching -> {
+                        bottomLoading = false
 
-                }
-                if (homeDataList?.isNotEmpty() == true) {
-                    bottomLoading = false
-                    EMarketSearch(
-                        onValueChange = {
-                            searchText = it
-                        },
-                        onSearch = {
-                            println(searchText)
-                        }
-                    )
+                        Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._10dp)))
 
-                    Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._10dp)))
+                        //LazyVerticalStaggeredGrid de kullanabilirim.
+                        //Fakat ben düzenli gözükmesini istiyorum ondan bunu kullandım.
+                        HomeItemLayout(
+                            homeDataList = homeDataList!!,
+                            homeDataListSize = homeDataListSize,
+                            viewModel = viewModel,
+                            isBottomLoad = bottomLoading,
+                            clickDetail = {
+                                clickDetail(it)
+                            },
+                        )
+                    }
+                    homeSearchList?.isNotEmpty() == true -> {
+                        bottomLoading = false
 
-                    //LazyVerticalStaggeredGrid de kullanabilirim.
-                    //Fakat ben düzenli gözükmesini istiyorum ondan bunu kullandım.
-                    HomeItemLayout(
-                        homeDataList = homeDataList,
-                        homeDataListSize = homeDataListSize,
-                        viewModel = viewModel,
-                        isBottomLoad = bottomLoading,
-                        clickDetail = {
-                            clickDetail(it)
-                        }
-                    )
+                        HomeItemLayout(
+                            homeDataList = homeSearchList!!,
+                            homeDataListSize = homeSearchList!!.size,
+                            viewModel = viewModel,
+                            isBottomLoad = bottomLoading,
+                            clickDetail = {
+                                clickDetail(it)
+                            },
+                        )
+                    }
                 }
             }
         }
@@ -116,7 +132,7 @@ fun HomeItemLayout(
     homeDataListSize: Int,
     viewModel: HomeViewModel,
     isBottomLoad: Boolean,
-    clickDetail: (EMarketItem) -> Unit
+    clickDetail: (EMarketItem) -> Unit,
 ) {
     var bottomLoading = remember { isBottomLoad }
 
@@ -164,4 +180,3 @@ fun HomeItemLayout(
         }
     )
 }
-
