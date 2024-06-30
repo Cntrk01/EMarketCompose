@@ -139,33 +139,38 @@ fun HomeItemLayout(
     LazyVerticalGrid(
         columns = GridCells.Adaptive(getScreenWidthInDp() / 3),
         content = {
-            items(homeDataList.size) { index ->
-                //Apiden homeDataListSize toplam api sonucunun int değerini dönüyor
-                //homeDataList.size da elimde var olan datayı dönüyor.En son datayı çekince bu değerler birbirine eşit olacağı için if bloğu çalışmıyor böylelikle apiye artık istek atılmıyor
-                if (index == homeDataList.size - 1 && homeDataListSize != homeDataList.size) {
-                    viewModel.loadMoreDataList()
-                    bottomLoading = true
-                }
-
-                EMarketHomeCard(
-                    modifier = Modifier
-                        .padding(dimensionResource(id = R.dimen._5dp)),
-                    image = homeDataList[index].image,
-                    price = homeDataList[index].price,
-                    description = homeDataList[index].name,
-                    clickButton = {
-                        // Card üzerindeki butona tıklama işlemleri
-                    },
-                    clickFavorite = {
-                        // Favoriye ekleme/çıkarma işlemleri
-                        // Veritabanına yazma işlemi yapılacak
-                        false
-                    },
-                    clickDetail = {
-                        clickDetail(homeDataList[index])
+            items(
+                count = homeDataList.size,
+                key = { index -> homeDataList[index].itemId },
+                itemContent =
+                { index ->
+                    //Apiden homeDataListSize toplam api sonucunun int değerini dönüyor
+                    //homeDataList.size da elimde var olan datayı dönüyor.En son datayı çekince bu değerler birbirine eşit olacağı için if bloğu çalışmıyor böylelikle apiye artık istek atılmıyor
+                    if (index == homeDataList.size - 1 && homeDataListSize != homeDataList.size) {
+                        viewModel.loadMoreDataList()
+                        bottomLoading = true
                     }
-                )
-            }
+
+                    EMarketHomeCard(
+                        modifier = Modifier
+                            .padding(dimensionResource(id = R.dimen._5dp)),
+                        image = homeDataList[index].image,
+                        price = homeDataList[index].price,
+                        description = homeDataList[index].name,
+                        clickButton = {
+                            // Card üzerindeki butona tıklama işlemleri
+                        },
+                        clickFavorite = {
+                            // Favoriye ekleme/çıkarma işlemleri
+                            // Veritabanına yazma işlemi yapılacak
+                            false
+                        },
+                        clickDetail = {
+                            clickDetail(homeDataList[index])
+                        }
+                    )
+                }
+            )
 
             item(span = { GridItemSpan(maxLineSpan) }) {
                 //Bottom Loading kullanılmıyor olarak gözüküyor fakat her seferinde bu blok çalışıyor
