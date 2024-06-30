@@ -38,7 +38,7 @@ fun OnBoarding(
             EMarketOnBoarding(
                 page = onBoardingPages[index],
                 pagerState = pagerState,
-                buttonState = buttonState,
+                buttonState = buttonState.value,
                 coroutineScope = coroutineScope,
                 onBoardingFinish = {
                     onBoardingFinish()

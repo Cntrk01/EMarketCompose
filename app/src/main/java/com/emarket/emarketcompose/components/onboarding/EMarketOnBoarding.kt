@@ -6,19 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -45,7 +41,7 @@ fun EMarketOnBoarding(
     modifier: Modifier = Modifier,
     page: OnBoardingPage,
     pagerState: PagerState,
-    buttonState: State<List<String>>,
+    buttonState: List<String>,
     coroutineScope: CoroutineScope,
     onBoardingFinish: () -> Unit
 ) {
@@ -115,7 +111,7 @@ fun EMarketOnBoarding(
 @Composable
 fun OnBoardingContent(
     pagerState: PagerState,
-    buttonState: State<List<String>>,
+    buttonState: List<String>,
     coroutineScope: CoroutineScope,
     onBoardingFinish: () -> Unit
 ) {
@@ -131,20 +127,21 @@ fun OnBoardingContent(
         verticalAlignment = Alignment.Bottom
     ) {
         when {
-            pagerState.pageCount > 0 && buttonState.value[0].isNotEmpty() -> {
+            pagerState.pageCount > 0 && buttonState[0].isNotEmpty() -> {
                 EMarketButton(
-                    text = buttonState.value[0],
+                    text = buttonState[0],
                     clickButton = {
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(page = pagerState.currentPage - 1)
                         }
                     })
             }
+
             else -> Spacer(modifier = Modifier.weight(1f))
         }
 
         EMarketButton(
-            text = buttonState.value[1],
+            text = buttonState[1],
             clickButton = {
                 if (pagerState.currentPage == 2) {
                     onBoardingFinish()
@@ -185,7 +182,7 @@ fun PreviewEMarketOnBoarding() {
             image = R.drawable.onboarding1
         ),
         pagerState = pagerState,
-        buttonState = buttonState,
+        buttonState = buttonState.value,
         coroutineScope = mockCoroutineScope,
         onBoardingFinish = {
 
