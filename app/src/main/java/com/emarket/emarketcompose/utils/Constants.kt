@@ -11,4 +11,11 @@ object Constants {
         BottomNavState.Favorite,
         BottomNavState.History
     )
+
+    val SORT_BY_LIST = listOf(
+        "Old To New",
+        "New To Old",
+        "Price High To Low",
+        "Price Low To High"
+    )
 }
