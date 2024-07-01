@@ -60,9 +60,8 @@ fun EMarketHeader(
         )
     }
 }
-
-@Composable
 @Preview
+@Composable
 fun PreviewHeader() {
     EMarketComposeTheme {
         EMarketHeader(headerTitle = "Hello World", headerType = HeaderType.MULTI)
