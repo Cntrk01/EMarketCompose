@@ -30,9 +30,9 @@ import com.emarket.emarketcompose.components.bottom_navigation.EMarketBottomNavi
 import com.emarket.emarketcompose.components.header.EMarketHeader
 import com.emarket.emarketcompose.components.header.HeaderType
 import com.emarket.emarketcompose.navigations.NavigationState
-import com.emarket.emarketcompose.presentation.basket.BasketPage
 import com.emarket.emarketcompose.presentation.detail.DetailPage
 import com.emarket.emarketcompose.presentation.favorite.FavoritePage
+import com.emarket.emarketcompose.presentation.filter.FilterPage
 import com.emarket.emarketcompose.presentation.history.HistoryPage
 import com.emarket.emarketcompose.presentation.home.HomePage
 import com.emarket.emarketcompose.presentation.home.HomeViewModel
@@ -107,7 +107,11 @@ fun BottomNavPage() {
             }
 
             composable(route = NavigationState.Basket.route) {
-                BasketPage()
+//                BasketPage()
+                FilterPage(
+                    modelList= listOf("Model 1", "Model 2", "Model 3"),
+                    brandList = listOf("Apple", "Samsung", "Google","Xiaomi","Oppo","Reeder"),
+                )
             }
 
             composable(route = NavigationState.Favorite.route) {
@@ -115,12 +119,12 @@ fun BottomNavPage() {
             }
 
             composable(route = NavigationState.History.route) {
-                HistoryPage() // Implement your HistoryPage here
+                HistoryPage()
             }
 
 
             composable(route = NavigationState.Filter.route) {
-                // FilterPage() // Implement your FilterPage here
+
             }
 
             composable(route = NavigationState.Detail.route) {
@@ -165,6 +169,18 @@ fun TopBarFunc(currentRoute: String?, navController: NavHostController) {
             EMarketHeader(
                 headerTitle = "History",
                 headerType = HeaderType.SIMPLE
+            )
+        }
+
+        NavigationState.Filter.route -> {
+            EMarketHeader(
+                modifier = Modifier
+                    .background(color = colorResource(id = R.color.background)),
+                headerPadding = dimensionResource(id = R.dimen._15dp),
+                headerType = HeaderType.MULTI,
+                headerTitle = "Filter",
+                headerIcon = R.drawable.baseline_close_24,
+                backClick = { navController.popBackStack() }
             )
         }
 

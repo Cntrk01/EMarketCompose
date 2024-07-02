@@ -4,16 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -37,6 +33,7 @@ fun EMarketHeader(
 ) {
     Row(
         modifier = modifier
+            .background(color = colorResource(id = R.color.primaryColor))
             .fillMaxWidth()
             .padding(headerPadding),
         horizontalArrangement = Arrangement.Start,
@@ -49,18 +46,19 @@ fun EMarketHeader(
                         backClick()
                     }
                     .padding(start = dimensionResource(id = R.dimen._5dp))
-                    .size(dimensionResource(id = R.dimen._45dp)),
+                    .size(dimensionResource(id = R.dimen._35dp)),
                 painter = painterResource(id = headerIcon),
                 contentDescription = "Back",
-                tint = colorResource(id = R.color.cardTitleColor)
+                tint = colorResource(id = R.color.headerTitleIconColor)
             )
         }
 
         EMarketText(
-            modifier = Modifier.padding(start = dimensionResource(id = R.dimen._15dp)),
+            modifier = Modifier
+                .padding(start = dimensionResource(id = R.dimen._15dp)),
             text = headerTitle,
             fontSize = dimensionResourceSp(id = R.dimen._20sp),
-            textColor = colorResource(id = R.color.cardTitleColor),
+            textColor = colorResource(id = R.color.headerTitleIconColor),
             fontWeight = FontWeight.Bold
         )
     }

@@ -50,10 +50,7 @@ fun EMarketFilter(
             filterList.forEachIndexed { index, text ->
                 Row(
                     modifier = Modifier
-                        .padding(
-                            top = dimensionResource(id = R.dimen._10dp),
-                            bottom = dimensionResource(id = R.dimen._10dp)
-                        ),
+                        ,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(
@@ -90,8 +87,7 @@ fun EMarketFilter(
             filterList.forEach { text ->
                 Row(
                     modifier = Modifier.padding(
-                        top = dimensionResource(id = R.dimen._10dp),
-                        bottom = dimensionResource(id = R.dimen._10dp)
+                        top = dimensionResource(id = R.dimen._2dp),
                     ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
