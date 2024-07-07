@@ -21,11 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.R
+import com.emarket.emarketcompose.components.button.EMarketButton
 import com.emarket.emarketcompose.components.home_card.EMarketHomeCard
 import com.emarket.emarketcompose.components.loading_status.EMarketLoading
 import com.emarket.emarketcompose.components.search.EMarketSearch
 import com.emarket.emarketcompose.components.text.EMarketText
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
+import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.utils.getScreenWidthInDp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +38,8 @@ import kotlinx.coroutines.launch
 fun HomePage(
     homeState: StateFlow<HomeState>,
     viewModel: HomeViewModel,
-    clickDetail: (EMarketItem) -> Unit
+    clickDetail: (EMarketItem) -> Unit,
+    clickFilter: (List<FilterItem>) -> Unit,
 ) {
     var firstLoadings = remember { true }
     val checkFirstLoading = remember { derivedStateOf { firstLoadings } }
@@ -68,12 +71,22 @@ fun HomePage(
         ) {
 
             dataState.apply {
-                if(!homeLoading){
+                if (!homeLoading) {
                     EMarketSearch(
                         onValueChange = {
                             viewModel.searchItem(it)
                         },
                         onSearch = {}
+                    )
+
+                    EMarketButton(
+                        modifier = Modifier.align(Alignment.End),
+                        text = "Filters",
+                        clickButton = {
+                            clickFilter(
+                                homeDataList?.map { it.filterItem } ?: emptyList()
+                            )
+                        }
                     )
                 }
                 when {
@@ -87,9 +100,11 @@ fun HomePage(
                         }
                         firstLoadings = false
                     }
+
                     homeError.isNotEmpty() -> {
                         EMarketText(text = homeError)
                     }
+
                     homeDataList?.isNotEmpty() == true && !isSearching -> {
                         bottomLoading = false
 
@@ -107,6 +122,7 @@ fun HomePage(
                             },
                         )
                     }
+
                     homeSearchList?.isNotEmpty() == true -> {
                         bottomLoading = false
 

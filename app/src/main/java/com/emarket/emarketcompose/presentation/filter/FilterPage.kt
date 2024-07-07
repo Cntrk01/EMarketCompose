@@ -4,13 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,18 +25,17 @@ import androidx.compose.ui.unit.dp
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.filter.EMarketFilter
 import com.emarket.emarketcompose.components.filter.FilterType
-import com.emarket.emarketcompose.components.header.EMarketHeader
-import com.emarket.emarketcompose.components.header.HeaderType
 import com.emarket.emarketcompose.components.search.EMarketSearch
 import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 import com.emarket.emarketcompose.utils.Constants
 
 @Composable
 fun FilterPage(
     modifier: Modifier = Modifier,
-    brandList: List<String>,
-    modelList: List<String>,
+    filterList: List<FilterItem>,
+    radioItem: (String) -> Unit
 ) {
     Column(
         modifier = modifier.background(color = colorResource(id = R.color.background))
@@ -59,7 +58,11 @@ fun FilterPage(
             modifier = Modifier.weight(1f)
         ){
             item {
-                SortByFunc()
+                SortByFunc(
+                    radioItem = {
+                        radioItem(it)
+                    }
+                )
             }
         }
 
@@ -82,7 +85,10 @@ fun FilterPage(
             modifier = Modifier.weight(1f)
         ){
             item {
-                BrandFunc(brandList = brandList, title = "Brand")
+                SearchListItem(
+                    filterList = filterList,
+                    title = "Brand"
+                )
             }
         }
         Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._15dp)))
@@ -105,14 +111,19 @@ fun FilterPage(
         ){
             item {
                 //modelList
-                BrandFunc(brandList = modelList, title = "Model")
+                SearchListItem(
+                    filterList = filterList,
+                    title = "Model"
+                )
             }
         }
     }
 }
 
 @Composable
-fun SortByFunc() {
+fun SortByFunc(
+    radioItem: (String) -> Unit
+) {
     EMarketText(
         modifier = Modifier
             .padding(start = dimensionResource(id = R.dimen._24dp)),
@@ -124,17 +135,46 @@ fun SortByFunc() {
 
     EMarketFilter(
         modifier = Modifier.padding(start = dimensionResource(id = R.dimen._35dp)),
-        filterList = Constants.SORT_BY_LIST,
-        filterType = FilterType.RADIO
+        filteredList = Constants.SORT_BY_LIST,
+        filterType = FilterType.RADIO,
+        radioItem = {
+            radioItem(it)
+        }
     )
 }
 
 @Composable
-fun BrandFunc(
-    brandList: List<String>,
+fun SearchListItem(
+    filterList: List<FilterItem>,
     title: String
 ) {
     var searchItem by remember { mutableStateOf("") }
+
+    val filteredList by remember(searchItem) {
+        derivedStateOf {
+            if (searchItem.isEmpty()) {
+                when (title) {
+                    "Brand" -> filterList.map { it.brand }
+                    "Model" -> filterList.map { it.model }
+                    else -> emptyList()
+                }
+            } else {
+                filterList.filter {
+                    when (title) {
+                        "Brand" -> it.brand.contains(searchItem, ignoreCase = true)
+                        "Model" -> it.model.contains(searchItem, ignoreCase = true)
+                        else -> false
+                    }
+                }.map {
+                    when (title) {
+                        "Brand" -> it.brand
+                        "Model" -> it.model
+                        else -> ""
+                    }
+                }
+            }
+        }
+    }
 
     EMarketText(
         modifier = Modifier
@@ -153,14 +193,12 @@ fun BrandFunc(
         onValueChange = {
             searchItem = it
         },
-        onSearch = {
-
-        }
+        onSearch = {}
     )
 
     EMarketFilter(
         modifier = Modifier.padding(start = dimensionResource(id = R.dimen._35dp)),
-        filterList = brandList,
+        filteredList = filteredList,
     )
 }
 
@@ -169,8 +207,10 @@ fun BrandFunc(
 fun PreviewFilterPage() {
     EMarketComposeTheme {
         FilterPage(
-            brandList = listOf("Apple", "Samsung", "Huawei", "Xioami"),
-            modelList = listOf("iPhone", "Galaxy", "P40"),
+            filterList = listOf(FilterItem(model = "Apple", brand = "Iphone 12")),
+            radioItem = {
+
+            }
         )
     }
 }

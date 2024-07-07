@@ -2,6 +2,7 @@ package com.emarket.emarketcompose.domain.usecase.data_list
 
 import com.emarket.emarketcompose.data.repository.remote.EMarketRemoteRepositoryImpl
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
+import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.utils.Constants
 import com.emarket.emarketcompose.utils.Response
 import kotlinx.coroutines.flow.Flow
@@ -14,14 +15,17 @@ class DataListUseCase @Inject constructor(
 
     suspend fun getData(
         pageIndex: Int,
-        listSize: (Int) -> Unit
+        listSize: (Int) -> Unit,
+        filterList: (List<FilterItem>) -> Unit
     ): Flow<Response<List<EMarketItem>>> {
         fetchPageItem = pageIndex * Constants.PAGE_SIZE
 
-        val responseFlow = eMarketRemoteRepositoryImpl.getData(fetchPageItem)
-        { maxSize ->
+        val responseFlow = eMarketRemoteRepositoryImpl.getData(fetchPageItem, listSize =  { maxSize ->
             listSize(maxSize)
-        }
+        },
+            filterList = {
+                filterList(it)
+            })
 
         return responseFlow
     }

@@ -13,9 +13,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -29,7 +31,9 @@ import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.bottom_navigation.EMarketBottomNavigation
 import com.emarket.emarketcompose.components.header.EMarketHeader
 import com.emarket.emarketcompose.components.header.HeaderType
+import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.navigations.NavigationState
+import com.emarket.emarketcompose.presentation.basket.BasketPage
 import com.emarket.emarketcompose.presentation.detail.DetailPage
 import com.emarket.emarketcompose.presentation.favorite.FavoritePage
 import com.emarket.emarketcompose.presentation.filter.FilterPage
@@ -40,7 +44,7 @@ import com.emarket.emarketcompose.utils.Constants.BOTTOM_NAV_ITEMS
 import com.emarket.emarketcompose.utils.navigateToDetails
 import com.emarket.emarketcompose.utils.navigateToTap
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "MutableCollectionMutableState")
 @Composable
 fun BottomNavPage() {
 
@@ -49,6 +53,9 @@ fun BottomNavPage() {
     val backStackState by navController.currentBackStackEntryAsState()
     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
     val currentRoute = backStackState?.destination?.route
+
+    var fullFilterList by remember { mutableStateOf(mutableListOf<FilterItem>()) }
+    var fullRadioItem by remember { mutableStateOf("") }
 
     selectedItem = remember(key1 = backStackState) {
         when (backStackState?.destination?.route) {
@@ -103,15 +110,19 @@ fun BottomNavPage() {
                             navController = navController,
                             eMarketItem = it
                         )
+                    },
+                    clickFilter = { filterList  ->
+                        fullFilterList = filterList.toMutableStateList()
+
+                        navigateToTap(
+                            navController = navController,
+                            route = NavigationState.Filter.route
+                        )
                     })
             }
 
             composable(route = NavigationState.Basket.route) {
-//                BasketPage()
-                FilterPage(
-                    modelList= listOf("Model 1", "Model 2", "Model 3"),
-                    brandList = listOf("Apple", "Samsung", "Google","Xiaomi","Oppo","Reeder"),
-                )
+                BasketPage()
             }
 
             composable(route = NavigationState.Favorite.route) {
@@ -122,9 +133,12 @@ fun BottomNavPage() {
                 HistoryPage()
             }
 
-
             composable(route = NavigationState.Filter.route) {
-
+                FilterPage(
+                    filterList = fullFilterList,
+                    radioItem = {
+                        fullRadioItem = it
+                })
             }
 
             composable(route = NavigationState.Detail.route) {

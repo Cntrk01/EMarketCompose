@@ -2,7 +2,9 @@ package com.emarket.emarketcompose.data.repository.remote
 
 import com.emarket.emarketcompose.data.remote.EMarketService
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
+import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.domain.repository.model.toEMarketItem
+import com.emarket.emarketcompose.domain.repository.model.toFilterItem
 import com.emarket.emarketcompose.domain.repository.remote.EMarketRemoteRepository
 import com.emarket.emarketcompose.utils.Constants
 import com.emarket.emarketcompose.utils.Response
@@ -16,7 +18,8 @@ class EMarketRemoteRepositoryImpl @Inject constructor(
 
     override suspend fun getData(
         totalPageItem: Int,
-        listSize: (Int) -> Unit
+        listSize: (Int) -> Unit,
+        filterList : (List<FilterItem>) -> Unit
     ): Flow<Response<List<EMarketItem>>> {
         return flow {
             try {
@@ -26,6 +29,10 @@ class EMarketRemoteRepositoryImpl @Inject constructor(
 
                 val totalDataSize = fetchData.size
                 listSize(totalDataSize)
+
+                filterList(remoteApi
+                    .getMarketData()
+                    .map { it.toFilterItem() })
 
                 val endIndex = minOf(totalPageItem + Constants.PAGE_SIZE, totalDataSize)
 
