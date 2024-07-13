@@ -50,12 +50,10 @@ fun EMarketHomeCard(
     description: String,
     colors: Int = R.color.cardColor,
     clickButton: () -> Unit,
-    clickFavorite: () -> Boolean,
-    clickDetail : () -> Unit = {}
+    clickFavorite: () -> Unit,
+    clickDetail : () -> Unit = {},
+    isShowStar : Boolean = false
 ) {
-    val checkImageStatus = remember {
-        mutableStateOf(false)
-    }
 
     Card(
         modifier = modifier
@@ -85,12 +83,10 @@ fun EMarketHomeCard(
                         .padding(dimensionResource(id = R.dimen._10dp))
                         .align(alignment = Alignment.TopEnd)
                         .clickable {
-                            checkImageStatus != checkImageStatus
                             clickFavorite()
                         },
-                    painter = if (checkImageStatus.value) painterResource(id = R.drawable.star) else painterResource(
-                        id = R.drawable.un_star
-                    ),
+                    painter = if (isShowStar) painterResource(id = R.drawable.star)
+                              else painterResource(id = R.drawable.un_star),
                     contentDescription = "Favorite"
                 )
             }
@@ -127,7 +123,8 @@ fun PreviewEMarketHomeCard() {
             },
             clickFavorite = {
                 true
-            }
+            },
+            isShowStar = true
         )
     }
 }
