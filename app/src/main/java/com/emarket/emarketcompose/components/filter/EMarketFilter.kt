@@ -28,7 +28,7 @@ import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun EMarketFilter(
-    filterList: List<String>,
+    filteredList: List<String>,
     modifier: Modifier = Modifier,
     checkBoxList: ((ArrayList<String>) -> Unit)? = null,
     radioItem: ((String) -> Unit)? = null,
@@ -47,13 +47,10 @@ fun EMarketFilter(
             .background(color = colorResource(id = R.color.background))
     ) {
         if (filterType == FilterType.CHECKBOX) {
-            filterList.forEachIndexed { index, text ->
+            filteredList.forEachIndexed { index, text ->
                 Row(
                     modifier = Modifier
-                        .padding(
-                            top = dimensionResource(id = R.dimen._10dp),
-                            bottom = dimensionResource(id = R.dimen._10dp)
-                        ),
+                        ,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(
@@ -87,11 +84,10 @@ fun EMarketFilter(
         }
 
         if (filterType == FilterType.RADIO) {
-            filterList.forEach { text ->
+            filteredList.forEach { text ->
                 Row(
                     modifier = Modifier.padding(
-                        top = dimensionResource(id = R.dimen._10dp),
-                        bottom = dimensionResource(id = R.dimen._10dp)
+                        top = dimensionResource(id = R.dimen._2dp),
                     ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -126,7 +122,7 @@ fun EMarketFilter(
 fun EMarketFilterPreview() {
     EMarketComposeTheme {
         EMarketFilter(
-            filterList = listOf("Hi", "123", "Hello"),
+            filteredList = listOf("Hi", "123", "Hello"),
             checkBoxList = {}
         )
     }

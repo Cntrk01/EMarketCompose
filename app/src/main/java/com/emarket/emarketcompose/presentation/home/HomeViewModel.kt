@@ -1,8 +1,10 @@
 package com.emarket.emarketcompose.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
+import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.domain.usecase.data_list.DataListUseCase
 import com.emarket.emarketcompose.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +26,7 @@ class HomeViewModel @Inject constructor(
 
     private var pageIndex = 0
     private var cacheHomeDataList = listOf<EMarketItem>()
+    private var filteredList = mutableListOf<FilterItem>()
 
     init {
         getDataList(pageIndex = pageIndex)
@@ -33,9 +36,11 @@ class HomeViewModel @Inject constructor(
         dataListUseCase
             .getData(
                 pageIndex = pageIndex,
-                listSize = { maxDataListSize = it }
-            )
-            .collect { response ->
+                listSize = { maxDataListSize = it },
+                filterList = {
+                    filteredList = it.toMutableList()
+                }
+            ).collect { response ->
                 when (response) {
 
                     is Response.Loading -> {
@@ -63,7 +68,8 @@ class HomeViewModel @Inject constructor(
                                 homeLoading = false,
                                 homeError = "",
                                 homeDataList = cacheHomeDataList,
-                                homeDataListSize = maxDataListSize
+                                homeDataListSize = maxDataListSize,
+                                filterList = filteredList
                             )
                         }
 //Bu şekilde bir kullanım sağladığımda yeni nesne üretim eşitlediği için ekran sürekli
