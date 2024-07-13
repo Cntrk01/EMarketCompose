@@ -1,7 +1,7 @@
 package com.emarket.emarketcompose.di
 
 import android.app.Application
-import com.emarket.emarketcompose.data.repository.local.EMarketRepositoryImpl
+import com.emarket.emarketcompose.data.repository.local.EMarketSplashScreenRepositoryImpl
 import com.emarket.emarketcompose.domain.repository.local.EMarketRepository
 import com.emarket.emarketcompose.domain.usecase.app_entry.ManageAppEntryUseCase
 import com.emarket.emarketcompose.domain.usecase.app_entry.ReadAppEntry
@@ -20,7 +20,7 @@ object ReadAndWriteModule {
     @Provides
     fun provideManageAppRepositoryImpl(
         myContext: Application
-    ): EMarketRepository = EMarketRepositoryImpl(context = myContext)
+    ): EMarketRepository = EMarketSplashScreenRepositoryImpl(context = myContext)
 
     @Singleton
     @Provides

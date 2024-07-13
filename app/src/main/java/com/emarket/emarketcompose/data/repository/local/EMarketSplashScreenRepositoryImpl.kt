@@ -10,7 +10,7 @@ import com.emarket.emarketcompose.domain.repository.local.EMarketRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class EMarketRepositoryImpl(
+class EMarketSplashScreenRepositoryImpl(
     private val context: Context
 ) : EMarketRepository {
     override suspend fun saveAppEntry() {

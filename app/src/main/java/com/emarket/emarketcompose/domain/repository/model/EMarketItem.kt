@@ -1,9 +1,10 @@
 package com.emarket.emarketcompose.domain.repository.model
 
+import androidx.room.Entity
 import com.emarket.emarketcompose.data.dto.EMarketResponseItem
 import java.io.Serializable
-import java.util.logging.Filter
 
+@Entity(tableName = "products", primaryKeys = ["itemId"])
 data class EMarketItem(
     val image:String,
     val name: String,
@@ -13,10 +14,7 @@ data class EMarketItem(
     val filterItem: FilterItem
 ) : Serializable
 
-data class FilterItem(
-    val model : String,
-    val brand : String
-)
+
 fun EMarketResponseItem.toFilterItem() : FilterItem{
     return FilterItem(
         model = model,
