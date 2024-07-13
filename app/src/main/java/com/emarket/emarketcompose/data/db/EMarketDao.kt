@@ -17,5 +17,8 @@ interface EMarketDao {
     suspend fun addProducts(products: EMarketItem)
 
     @Delete
-    suspend fun deleteProducts(productId: String)
+    suspend fun deleteProducts(productId: EMarketItem)
+
+    @Query("SELECT EXISTS (SELECT * FROM products WHERE itemId = :productId)")
+    suspend fun checkExistProduct(productId: String) : Boolean
 }

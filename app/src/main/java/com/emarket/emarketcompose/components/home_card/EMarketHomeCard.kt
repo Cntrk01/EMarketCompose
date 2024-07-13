@@ -50,11 +50,12 @@ fun EMarketHomeCard(
     description: String,
     colors: Int = R.color.cardColor,
     clickButton: () -> Unit,
-    clickFavorite: () -> Boolean,
-    clickDetail : () -> Unit = {}
+    clickFavorite: () -> Unit,
+    clickDetail : () -> Unit = {},
+    isShowStar : Boolean = false
 ) {
     val checkImageStatus = remember {
-        mutableStateOf(false)
+        mutableStateOf(isShowStar)
     }
 
     Card(

@@ -3,6 +3,7 @@ package com.emarket.emarketcompose.di
 import android.content.Context
 import androidx.room.Room
 import com.emarket.emarketcompose.data.db.EMarketDb
+import com.emarket.emarketcompose.data.repository.local.EMarketRoomRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,5 +28,13 @@ object DbModule {
            .fallbackToDestructiveMigration()
            .allowMainThreadQueries()
            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideEMarketRoomRepositoryImpl(
+        eMarketDb: EMarketDb
+    ) : EMarketRoomRepositoryImpl{
+        return EMarketRoomRepositoryImpl(eMarketDbService = eMarketDb)
     }
 }

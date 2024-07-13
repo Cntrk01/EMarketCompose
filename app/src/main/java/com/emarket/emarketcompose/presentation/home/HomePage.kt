@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.button.EMarketButton
@@ -33,6 +35,7 @@ import com.emarket.emarketcompose.components.search.EMarketSearch
 import com.emarket.emarketcompose.components.text.EMarketText
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
+import com.emarket.emarketcompose.presentation.base_viewmodel.EMarketRoomViewModel
 import com.emarket.emarketcompose.utils.getScreenWidthInDp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
@@ -45,11 +48,13 @@ fun HomePage(
     viewModel: HomeViewModel,
     clickDetail: (EMarketItem) -> Unit,
     clickFilter: (List<FilterItem>) -> Unit,
+    roomViewModel: EMarketRoomViewModel = hiltViewModel()
 ) {
     var firstLoadings = remember { true }
     val checkFirstLoading = remember { derivedStateOf { firstLoadings } }
     var bottomLoading = remember { true }
     val isSearching = remember { false }
+    var imageStatus by remember { mutableStateOf(false) }
 
     var dataState by remember { mutableStateOf(HomeState()) }
 
@@ -61,6 +66,12 @@ fun HomePage(
         }
         onDispose {
             job.cancel()
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        roomViewModel.listenerAddProducts.observeForever {
+            imageStatus = it
         }
     }
 
@@ -125,6 +136,10 @@ fun HomePage(
                             clickDetail = {
                                 clickDetail(it)
                             },
+                            clickFavorite = {
+                                roomViewModel.checkProducts(product = it)
+                            } ,
+                            isShowStar = imageStatus
                         )
                     }
 
@@ -139,6 +154,8 @@ fun HomePage(
                             clickDetail = {
                                 clickDetail(it)
                             },
+                            clickFavorite = {},
+                            isShowStar = imageStatus
                         )
                     }
                 }
@@ -154,6 +171,8 @@ fun HomeItemLayout(
     viewModel: HomeViewModel,
     isBottomLoad: Boolean,
     clickDetail: (EMarketItem) -> Unit,
+    clickFavorite: (EMarketItem) -> Unit,
+    isShowStar : Boolean
 ) {
     var bottomLoading = remember { isBottomLoad }
 
@@ -182,13 +201,14 @@ fun HomeItemLayout(
                             // Card üzerindeki butona tıklama işlemleri
                         },
                         clickFavorite = {
-                            // Favoriye ekleme/çıkarma işlemleri
-                            // Veritabanına yazma işlemi yapılacak
-                            false
+                            clickFavorite(
+                                homeDataList[index]
+                            )
                         },
                         clickDetail = {
                             clickDetail(homeDataList[index])
-                        }
+                        },
+                        isShowStar = isShowStar
                     )
                 }
             )
