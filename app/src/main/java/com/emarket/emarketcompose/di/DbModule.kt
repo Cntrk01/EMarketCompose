@@ -20,21 +20,22 @@ object DbModule {
     fun provideRoomDb(
         @ApplicationContext context: Context
     ): EMarketDb {
-       return Room
-           .databaseBuilder(
-               context = context,
-               klass = EMarketDb::class.java,
-               name = "emarket.db")
-           .fallbackToDestructiveMigration()
-           .allowMainThreadQueries()
-           .build()
+        return Room
+            .databaseBuilder(
+                context = context,
+                klass = EMarketDb::class.java,
+                name = "emarket.db1"
+            )
+            .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
+            .build()
     }
 
     @Singleton
     @Provides
     fun provideEMarketRoomRepositoryImpl(
         eMarketDb: EMarketDb
-    ) : EMarketRoomRepositoryImpl{
+    ): EMarketRoomRepositoryImpl {
         return EMarketRoomRepositoryImpl(eMarketDbService = eMarketDb)
     }
 }
