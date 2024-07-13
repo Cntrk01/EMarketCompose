@@ -1,5 +1,6 @@
 package com.emarket.emarketcompose.domain.usecase.data_list
 
+import android.util.Log
 import com.emarket.emarketcompose.data.repository.remote.EMarketRemoteRepositoryImpl
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
@@ -20,11 +21,17 @@ class DataListUseCase @Inject constructor(
     ): Flow<Response<List<EMarketItem>>> {
         fetchPageItem = pageIndex * Constants.PAGE_SIZE
 
-        val responseFlow = eMarketRemoteRepositoryImpl.getData(fetchPageItem, listSize =  { maxSize ->
-            listSize(maxSize)
-        },
+        val responseFlow = eMarketRemoteRepositoryImpl.getData(
+            totalPageItem = fetchPageItem,
+            listSize = { maxSize ->
+                listSize(maxSize)
+            },
             filterList = {
-                filterList(it)
+                val uniqueFilteredList = it.distinctBy { item ->
+                    item.brand to item.model
+                }
+
+                filterList(uniqueFilteredList.toMutableList())
             })
 
         return responseFlow
