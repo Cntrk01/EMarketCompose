@@ -44,11 +44,11 @@ class EMarketButtonKtTest {
         //composeTestRule.onNodeWithText("Button").assertDoesNotExist()
 
         // Test clicking action after performing click
-        //composeTestRule.waitForIdle()
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText("Button").performClick()
         // Assert that the click action was triggered
-//        composeTestRule.runOnIdle {
-//            assert(clicked)
-//        }
+        composeTestRule.runOnIdle {
+            assert(clicked)
+        }
     }
 }
