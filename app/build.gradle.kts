@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.junit.ktx)
+    implementation(libs.androidx.ui.test.junit4.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -109,4 +111,10 @@ dependencies {
     annotationProcessor (libs.androidx.room.compiler)
     kapt (libs.androidx.room.compiler)
     implementation(libs.lottie.compose)
+
+    androidTestImplementation (libs.ui.test.junit4)
+    debugImplementation (libs.ui.tooling)
+    debugImplementation (libs.ui.test.manifest)
+    testImplementation(libs.junit)
+    //androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
 }
