@@ -31,8 +31,7 @@ fun EMarketButton(
 ) {
     Button(
         modifier = modifier
-            .padding(padding)
-            .testTag("Button"),
+            .padding(padding),
         colors = ButtonDefaults.buttonColors(color),
         onClick = { clickButton() },
         shape = RoundedCornerShape(shape)
