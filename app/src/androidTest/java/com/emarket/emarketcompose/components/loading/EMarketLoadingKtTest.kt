@@ -22,7 +22,7 @@ class EMarketLoadingKtTest {
         composeTestRule.setContent {
             EMarketLoading(modifier = Modifier.testTag("EMarketLoading"))
         }
-        
+
         composeTestRule.onNodeWithTag("EMarketLoading").assertIsDisplayed()
     }
 }
