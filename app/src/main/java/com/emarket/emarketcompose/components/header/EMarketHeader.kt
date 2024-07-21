@@ -70,8 +70,3 @@ fun PreviewHeader() {
         EMarketHeader(headerTitle = "Hello World", headerType = HeaderType.MULTI)
     }
 }
-
-
-
-
-
