@@ -5,7 +5,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emarket.emarketcompose.data.repository.local.EMarketFavoriteRepositoryImpl
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.usecase.db.FavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
