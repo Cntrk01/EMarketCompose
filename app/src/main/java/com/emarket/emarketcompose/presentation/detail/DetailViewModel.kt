@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.usecase.db.FavoriteUseCase
+import com.emarket.emarketcompose.presentation.base_viewmodel.FavoriteBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val favoriteUseCase: FavoriteUseCase,
-) : ViewModel() {
+) : FavoriteBaseViewModel(favoriteUseCase) {
 
     var isFavorite = mutableStateOf(false)
 
@@ -24,14 +25,6 @@ class DetailViewModel @Inject constructor(
         withContext(Dispatchers.Main){
             isFavorite.value = status
         }
-    }
-
-    private fun addToFavorite(eMarketItem: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
-        favoriteUseCase.addProducts(eMarketItem)
-    }
-
-    private fun removeFromFavorite(eMarketItem: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
-        favoriteUseCase.deleteProducts(eMarketItem)
     }
 
     fun favoriteButtonAction(

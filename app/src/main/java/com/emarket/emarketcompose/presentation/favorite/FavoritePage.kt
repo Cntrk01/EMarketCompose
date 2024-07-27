@@ -28,7 +28,6 @@ import com.emarket.emarketcompose.components.text.EMarketText
 
 @Composable
 fun FavoritePage(
-    modifier: Modifier = Modifier,
     favoriteViewModel: FavoriteViewModel = hiltViewModel()
 ) {
     favoriteViewModel.refreshFavorites()
