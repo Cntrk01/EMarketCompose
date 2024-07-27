@@ -44,7 +44,6 @@ fun HomePage(
 ) {
     var firstLoadings = remember { true }
     val checkFirstLoading = remember { derivedStateOf { firstLoadings } }
-    var bottomLoading = remember { true }
     val isSearching = remember { false }
     var dataState by remember { mutableStateOf(HomeState()) }
 
@@ -105,18 +104,15 @@ fun HomePage(
                     }
 
                     homeDataList?.isNotEmpty() == true && !isSearching -> {
-                        bottomLoading = false
 
                         Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._2dp)))
 
                         //LazyVerticalStaggeredGrid de kullanabilirim.
                         //Fakat ben düzenli gözükmesini istiyorum ondan bunu kullandım.
-
                         HomeItemLayout(
                             homeDataList = homeDataList!!,
                             homeDataListSize = homeDataListSize,
                             viewModel = viewModel,
-                            isBottomLoad = bottomLoading,
                             clickDetail = {
                                 clickDetail(it)
                             },
@@ -127,13 +123,11 @@ fun HomePage(
                     }
 
                     homeSearchList?.isNotEmpty() == true -> {
-                        bottomLoading = false
 
                         HomeItemLayout(
                             homeDataList = homeSearchList!!,
                             homeDataListSize = homeSearchList!!.size,
                             viewModel = viewModel,
-                            isBottomLoad = bottomLoading,
                             clickDetail = {
                                 clickDetail(it)
                             },
@@ -163,11 +157,9 @@ fun HomeItemLayout(
     homeDataList: List<EMarketItem>,
     homeDataListSize: Int,
     viewModel: HomeViewModel,
-    isBottomLoad: Boolean,
     clickDetail: (EMarketItem) -> Unit,
     clickFavorite: (EMarketItem) -> Unit,
 ) {
-    var bottomLoading = remember { isBottomLoad }
     val listenerProducts = viewModel.listenerAddProducts.value
 
     LazyVerticalGrid(
@@ -175,12 +167,10 @@ fun HomeItemLayout(
         content = {
             items(
                 count = homeDataList.size,
-                key = { index -> homeDataList[index].itemId },
-                itemContent =
-                { index ->
+                itemContent = { index ->
+                    //homeDataListSize != homeDataList.size eşit olmadığı sürece load işlemi yapcaz. Eşit olduktan sonra tekrar yaparsa ekran boş gözüküyor
                     if (index == homeDataList.size - 1 && homeDataListSize != homeDataList.size) {
                         viewModel.loadMoreDataList()
-                        bottomLoading = true
                     }
 
                     viewModel.updateProductStatus(product = homeDataList[index])
@@ -188,33 +178,21 @@ fun HomeItemLayout(
                     val productStatus = listenerProducts[homeDataList[index].itemId] ?: false
 
                     EMarketHomeCard(
-                        modifier = Modifier
-                            .padding(dimensionResource(id = R.dimen._5dp)),
+                        modifier = Modifier.padding(dimensionResource(id = R.dimen._5dp)),
                         image = homeDataList[index].image,
                         price = homeDataList[index].price,
                         description = homeDataList[index].name,
-                        clickButton = {
-                            // Card üzerindeki butona tıklama işlemleri
-                        },
-                        clickFavorite = {
-                            clickFavorite(
-                                homeDataList[index]
-                            )
-                        },
-                        clickDetail = {
-                            clickDetail(homeDataList[index])
-                        },
+                        clickButton = {},
+                        clickFavorite = { clickFavorite(homeDataList[index]) },
+                        clickDetail = { clickDetail(homeDataList[index]) },
                         isShowStar = productStatus
                     )
                 }
             )
 
             item(span = { GridItemSpan(maxLineSpan) }) {
-                if (bottomLoading) {
-                    EMarketLoading(
-                        modifier = Modifier
-                            .padding(bottom = dimensionResource(id = R.dimen._10dp))
-                    )
+                if (homeDataList.size < homeDataListSize) {
+                    EMarketLoading(modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen._10dp)))
                 }
             }
         }
