@@ -15,6 +15,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +47,7 @@ fun HomePage(
     val checkFirstLoading = remember { derivedStateOf { firstLoadings } }
     val isSearching = remember { false }
     var dataState by remember { mutableStateOf(HomeState()) }
+    var searchText by rememberSaveable { mutableStateOf("") }
 
     DisposableEffect(homeState) {
         val job = viewModel.viewModelScope.launch(Dispatchers.IO) {
@@ -71,10 +73,14 @@ fun HomePage(
             dataState.apply {
                 if (!homeLoading) {
                     EMarketSearch(
+                        text = searchText,
                         onValueChange = {
+                            searchText = it
                             viewModel.searchItem(it)
                         },
-                        onSearch = {}
+                        onSearch = {
+                            viewModel.searchItem(searchText)
+                        }
                     )
 
                     EMarketButton(

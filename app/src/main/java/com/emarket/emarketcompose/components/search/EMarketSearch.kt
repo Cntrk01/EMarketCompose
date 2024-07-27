@@ -33,10 +33,11 @@ fun EMarketSearch(
     searchPadding: Dp = dimensionResource(id = R.dimen._0dp),
     roundedShape: Dp = dimensionResource(id = R.dimen._10dp),
     hint: String = "Search",
+    text : String = "",
     onValueChange: (String) -> Unit,
     onSearch: () -> Unit
 ) {
-    var searchText by remember { mutableStateOf("") }
+    var searchText by remember { mutableStateOf(text) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     TextField(
