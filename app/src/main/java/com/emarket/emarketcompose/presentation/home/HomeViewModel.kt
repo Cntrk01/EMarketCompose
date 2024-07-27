@@ -17,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,6 +38,8 @@ class HomeViewModel @Inject constructor(
 
     private var _addProducts: MutableState<Map<String, Boolean>> = mutableStateOf(emptyMap())
     val listenerAddProducts: State<Map<String, Boolean>> = _addProducts
+
+    private var isLoadingMoreData = false
 
     init {
         getDataList(pageIndex = pageIndex)
@@ -82,6 +85,9 @@ class HomeViewModel @Inject constructor(
                                 filterList = filteredList
                             )
                         }
+                        isLoadingMoreData = false
+                        println(cacheHomeDataList.size)
+
 //Bu şekilde bir kullanım sağladığımda yeni nesne üretim eşitlediği için ekran sürekli
 //recompositiona ugruyordu fakat ben var olan statemi update ederek yanlızca olan değişiklikleri aktarmış oldum !!
 //                        _homeDataState.value=HomeState(
@@ -94,12 +100,15 @@ class HomeViewModel @Inject constructor(
             }
     }
 
+    //isLoadingMoreData ile loading işlemi yaptığım kısımdan birden çok istek geldiği için burada tek 1 kez çalışmasını sağlayan bir yapı kurdum
     fun loadMoreDataList() {
+        if (isLoadingMoreData) return
+        isLoadingMoreData = true
         pageIndex += 1
         getDataList(pageIndex = pageIndex)
     }
 
-    fun searchItem(query: String)  {
+    fun searchItem(query: String) {
         _homeDataState.update { currentState ->
             if (query.isEmpty()) {
                 currentState.copy(
@@ -114,7 +123,7 @@ class HomeViewModel @Inject constructor(
 
                 val searchItem = cacheHomeDataList.filter { item ->
                     item.name.contains(query, ignoreCase = true) ||
-                    item.description.contains(query, ignoreCase = true)
+                            item.description.contains(query, ignoreCase = true)
                 }
 
                 currentState.copy(
