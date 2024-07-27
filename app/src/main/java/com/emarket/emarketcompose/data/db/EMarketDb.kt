@@ -8,5 +8,5 @@ import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 @Database(entities = [EMarketItem::class], version = 1, exportSchema = false)
 @TypeConverters(FilterItemConventers::class)
 abstract class EMarketDb : RoomDatabase() {
-    abstract fun dbDao(): EMarketDao
+    abstract fun dbDao(): EMarketFavoriteDao
 }

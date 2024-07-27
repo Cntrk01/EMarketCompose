@@ -5,7 +5,7 @@ import com.emarket.emarketcompose.data.db.EMarketDb
 import com.emarket.emarketcompose.data.remote.EMarketDbService
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 
-class EMarketRoomRepositoryImpl(private val eMarketDbService: EMarketDb) : EMarketDbService {
+class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : EMarketDbService {
     override fun getProducts(): List<EMarketItem> {
         TODO("Not yet implemented")
     }
