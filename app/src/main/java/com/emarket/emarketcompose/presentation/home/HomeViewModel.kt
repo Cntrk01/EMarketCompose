@@ -117,9 +117,9 @@ class HomeViewModel @Inject constructor(
                 )
             } else {
 
-                if (cacheHomeDataList.isEmpty()) {
-                    _homeDataState.value.homeDataList?.let { cacheHomeDataList = it }
-                }
+                //if (cacheHomeDataList.isEmpty()) {
+                //                    _homeDataState.value.homeDataList?.let { cacheHomeDataList = it }
+                //                }
 
                 val searchItem = cacheHomeDataList.filter { item ->
                     item.name.contains(query, ignoreCase = true) ||
