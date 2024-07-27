@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +42,13 @@ class HomeViewModel @Inject constructor(
     val listenerAddProducts: State<Map<String, Boolean>> = _addProducts
 
     private var isLoadingMoreData = false
+
+    //Güncellemelerin senkronize edilmesi sağlanır, böylece aynı anda birden fazla erişim olmasını önler.
+    //Kodda hangi durumlarda eş zamanlı erişim sorunlarıyla karşılaşabileceğini belirlemekle ilgilidir.
+    // viewModelScope.launch içinde çalıştırılan fonksiyonlar zaten ana iş parçacığının dışında çalışır ve eğer _addProducts
+    // durumu başka iş parçacıkları tarafından aynı anda değiştirilirse veri tutarsızlığı sorunlarına yol açabilir.
+    // Ancak, Kotlin StateFlow ve MutableStateFlow zaten thread-safe yapılar olduğu için, ek bir Mutex kullanmak çoğu durumda gerekli olmayabilir.
+    private val productStatusMutex = Mutex()
 
     init {
         getDataList(pageIndex = pageIndex)
@@ -135,6 +144,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun checkProducts(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
+        //withLock fonksiyonu, kilidi otomatik olarak serbest bırakır, böylece kilidi serbest bırakmayı unutma gibi hatalardan kaçınılır.
+        //productStatusMutex.withLock {
         val itemStatus = checkProduct(product.itemId)
         val updatedMap = _addProducts.value.toMutableMap()
         if (itemStatus) {
@@ -145,12 +156,15 @@ class HomeViewModel @Inject constructor(
             addToFavorite(product)
         }
         _addProducts.value = updatedMap
+        //}
     }
 
     fun updateProductStatus(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
+        //productStatusMutex.withLock {
         val itemStatus = checkProduct(product.itemId)
         val updatedMap = _addProducts.value.toMutableMap()
         updatedMap[product.itemId] = itemStatus
         _addProducts.value = updatedMap
+        //}
     }
 }
