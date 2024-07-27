@@ -1,11 +1,17 @@
 package com.emarket.emarketcompose.presentation.home
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.domain.usecase.data_list.DataListUseCase
+import com.emarket.emarketcompose.domain.usecase.db.FavoriteUseCase
+import com.emarket.emarketcompose.presentation.base_viewmodel.FavoriteBaseViewModel
+import com.emarket.emarketcompose.presentation.favorite.FavoriteViewModel
 import com.emarket.emarketcompose.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +23,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val dataListUseCase: DataListUseCase
-) : ViewModel() {
+    private val dataListUseCase: DataListUseCase,
+    private val favoriteUseCase: FavoriteUseCase
+) : FavoriteBaseViewModel(favoriteUseCase = favoriteUseCase) {
 
     private var maxDataListSize = 0
     private val _homeDataState = MutableStateFlow(HomeState())
@@ -27,6 +34,9 @@ class HomeViewModel @Inject constructor(
     private var pageIndex = 0
     private var cacheHomeDataList = listOf<EMarketItem>()
     private var filteredList = mutableListOf<FilterItem>()
+
+    private var _addProducts: MutableState<Map<String, Boolean>> = mutableStateOf(emptyMap())
+    val listenerAddProducts: State<Map<String, Boolean>> = _addProducts
 
     init {
         getDataList(pageIndex = pageIndex)
@@ -90,7 +100,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun searchItem(query: String)  {
-
         _homeDataState.update { currentState ->
             if (query.isEmpty()) {
                 currentState.copy(
@@ -114,5 +123,25 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun checkProducts(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
+        val itemStatus = checkProduct(product.itemId)
+        val updatedMap = _addProducts.value.toMutableMap()
+        if (itemStatus) {
+            updatedMap[product.itemId] = false
+            removeFromFavorite(product)
+        } else {
+            updatedMap[product.itemId] = true
+            addToFavorite(product)
+        }
+        _addProducts.value = updatedMap
+    }
+
+    fun updateProductStatus(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
+        val itemStatus = checkProduct(product.itemId)
+        val updatedMap = _addProducts.value.toMutableMap()
+        updatedMap[product.itemId] = itemStatus
+        _addProducts.value = updatedMap
     }
 }

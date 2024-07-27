@@ -29,7 +29,6 @@ import com.emarket.emarketcompose.components.search.EMarketSearch
 import com.emarket.emarketcompose.components.text.EMarketText
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
-import com.emarket.emarketcompose.presentation.base_viewmodel.EMarketRoomViewModel
 import com.emarket.emarketcompose.utils.getScreenWidthInDp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
@@ -42,7 +41,6 @@ fun HomePage(
     viewModel: HomeViewModel,
     clickDetail: (EMarketItem) -> Unit,
     clickFilter: (List<FilterItem>) -> Unit,
-    roomViewModel: EMarketRoomViewModel = hiltViewModel()
 ) {
     var firstLoadings = remember { true }
     val checkFirstLoading = remember { derivedStateOf { firstLoadings } }
@@ -123,9 +121,8 @@ fun HomePage(
                                 clickDetail(it)
                             },
                             clickFavorite = {
-                                roomViewModel.checkProducts(product = it)
+                                viewModel.checkProducts(product = it)
                             },
-                            roomViewModel = roomViewModel
                         )
                     }
 
@@ -141,7 +138,6 @@ fun HomePage(
                                 clickDetail(it)
                             },
                             clickFavorite = {},
-                            roomViewModel = roomViewModel
                         )
                     }
                 }
@@ -170,10 +166,9 @@ fun HomeItemLayout(
     isBottomLoad: Boolean,
     clickDetail: (EMarketItem) -> Unit,
     clickFavorite: (EMarketItem) -> Unit,
-    roomViewModel: EMarketRoomViewModel,
 ) {
     var bottomLoading = remember { isBottomLoad }
-    val listenerProducts = roomViewModel.listenerAddProducts.value
+    val listenerProducts = viewModel.listenerAddProducts.value
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(getScreenWidthInDp() / 3),
@@ -188,7 +183,7 @@ fun HomeItemLayout(
                         bottomLoading = true
                     }
 
-                    roomViewModel.updateProductStatus(product = homeDataList[index])
+                    viewModel.updateProductStatus(product = homeDataList[index])
 
                     val productStatus = listenerProducts[homeDataList[index].itemId] ?: false
 
