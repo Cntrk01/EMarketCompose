@@ -117,4 +117,5 @@ dependencies {
     debugImplementation (libs.ui.test.manifest)
     testImplementation(libs.junit)
     //androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
+    implementation (libs.androidx.lifecycle.viewmodel.savedstate)
 }

@@ -3,7 +3,8 @@ package com.emarket.emarketcompose.di
 import android.content.Context
 import androidx.room.Room
 import com.emarket.emarketcompose.data.db.EMarketDb
-import com.emarket.emarketcompose.data.repository.local.EMarketRoomRepositoryImpl
+import com.emarket.emarketcompose.data.repository.local.EMarketFavoriteRepositoryImpl
+import com.emarket.emarketcompose.domain.usecase.db.FavoriteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,9 +34,17 @@ object DbModule {
 
     @Singleton
     @Provides
-    fun provideEMarketRoomRepositoryImpl(
+    fun provideEMarketFavoriteRepositoryImpl(
         eMarketDb: EMarketDb
-    ): EMarketRoomRepositoryImpl {
-        return EMarketRoomRepositoryImpl(eMarketDbService = eMarketDb)
+    ): EMarketFavoriteRepositoryImpl {
+        return EMarketFavoriteRepositoryImpl(eMarketDbService = eMarketDb)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEMarketFavoriteUseCase(
+        eMarketFavoriteRepositoryImpl: EMarketFavoriteRepositoryImpl
+    ) : FavoriteUseCase{
+        return FavoriteUseCase(eMarketFavoriteRepositoryImpl = eMarketFavoriteRepositoryImpl)
     }
 }

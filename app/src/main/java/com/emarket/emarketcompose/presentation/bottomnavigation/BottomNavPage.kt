@@ -31,6 +31,7 @@ import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.bottom_navigation.EMarketBottomNavigation
 import com.emarket.emarketcompose.components.header.EMarketHeader
 import com.emarket.emarketcompose.components.header.HeaderType
+import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.navigations.NavigationState
 import com.emarket.emarketcompose.presentation.basket.BasketPage
@@ -142,7 +143,16 @@ fun BottomNavPage() {
             }
 
             composable(route = NavigationState.Detail.route) {
-                DetailPage()
+                val eMarketItem = navController.previousBackStackEntry?.savedStateHandle?.get<EMarketItem>("eMarketItem")
+
+                eMarketItem?.let {item->
+                    DetailPage(
+                        eMarketItem = item,
+                        clickAddToCardButton = {
+
+                        },
+                    )
+                }
             }
         }
     }

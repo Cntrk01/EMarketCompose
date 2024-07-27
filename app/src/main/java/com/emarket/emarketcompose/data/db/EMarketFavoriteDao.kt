@@ -8,7 +8,7 @@ import androidx.room.Query
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 
 @Dao
-interface EMarketDao {
+interface EMarketFavoriteDao {
 
     @Query("SELECT * FROM products")
     fun getProducts() : List<EMarketItem>
