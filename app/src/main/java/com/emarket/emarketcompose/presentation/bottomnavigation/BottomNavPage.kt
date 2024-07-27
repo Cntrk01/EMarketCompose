@@ -127,7 +127,7 @@ fun BottomNavPage() {
             }
 
             composable(route = NavigationState.Favorite.route) {
-                FavoritePage() // Implement your FavoritePage here
+                FavoritePage()
             }
 
             composable(route = NavigationState.History.route) {
@@ -144,13 +144,12 @@ fun BottomNavPage() {
 
             composable(route = NavigationState.Detail.route) {
                 val eMarketItem = navController.previousBackStackEntry?.savedStateHandle?.get<EMarketItem>("eMarketItem")
-
                 eMarketItem?.let {item->
                     DetailPage(
                         eMarketItem = item,
                         clickAddToCardButton = {
 
-                        },
+                        }
                     )
                 }
             }
