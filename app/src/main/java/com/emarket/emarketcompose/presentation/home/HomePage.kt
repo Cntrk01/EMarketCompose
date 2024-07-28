@@ -20,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.button.EMarketButton
@@ -122,9 +121,6 @@ fun HomePage(
                             clickDetail = {
                                 clickDetail(it)
                             },
-                            clickFavorite = {
-                                viewModel.checkProducts(product = it)
-                            },
                         )
                     }
 
@@ -137,7 +133,6 @@ fun HomePage(
                             clickDetail = {
                                 clickDetail(it)
                             },
-                            clickFavorite = {},
                         )
                     }
                 }
@@ -164,7 +159,6 @@ fun HomeItemLayout(
     homeDataListSize: Int,
     viewModel: HomeViewModel,
     clickDetail: (EMarketItem) -> Unit,
-    clickFavorite: (EMarketItem) -> Unit,
 ) {
     val listenerProducts = viewModel.listenerAddProducts.value
 
@@ -188,9 +182,15 @@ fun HomeItemLayout(
                         image = homeDataList[index].image,
                         price = homeDataList[index].price,
                         description = homeDataList[index].name,
-                        clickButton = {},
-                        clickFavorite = { clickFavorite(homeDataList[index]) },
-                        clickDetail = { clickDetail(homeDataList[index]) },
+                        clickAddToCardButton = {
+                            viewModel.addToCardProduct(homeDataList[index])
+                        },
+                        clickFavorite = {
+                            viewModel.checkProducts(product = homeDataList[index])
+                        },
+                        clickDetail = {
+                            clickDetail(homeDataList[index])
+                        },
                         isShowStar = productStatus
                     )
                 }

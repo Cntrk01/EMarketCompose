@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emarket.emarketcompose.domain.usecase.app_entry.ManageAppEntryUseCase
+import com.emarket.emarketcompose.domain.usecase.splash_screen.ManageAppEntryUseCase
 import com.emarket.emarketcompose.navigations.NavigationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

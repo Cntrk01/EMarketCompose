@@ -2,13 +2,13 @@ package com.emarket.emarketcompose.data.repository.local
 
 import android.util.Log
 import com.emarket.emarketcompose.data.db.EMarketDb
-import com.emarket.emarketcompose.data.remote.EMarketDbService
+import com.emarket.emarketcompose.data.remote.EMarketFavoriteRepository
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 
-class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : EMarketDbService {
+class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : EMarketFavoriteRepository {
     override fun getProducts(): List<EMarketItem> {
         return runCatching {
-            eMarketDbService.dbDao().getProducts()
+            eMarketDbService.favoriteDao().getProducts()
         }.onFailure { exception ->
             when(exception){
                 is RuntimeException -> Log.e("RuntimeException",exception.message.toString())
@@ -21,7 +21,7 @@ class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : E
 
     override suspend fun addProducts(products: EMarketItem) {
         runCatching {
-            eMarketDbService.dbDao().addProducts(products)
+            eMarketDbService.favoriteDao().addProducts(products)
         }.onFailure { exception ->
             when(exception){
                 is RuntimeException -> Log.e("RuntimeException",exception.message.toString())
@@ -32,7 +32,7 @@ class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : E
 
     override suspend fun deleteProducts(productId: EMarketItem) {
         runCatching {
-            eMarketDbService.dbDao().deleteProducts(productId = productId)
+            eMarketDbService.favoriteDao().deleteProducts(productId = productId)
         }.onFailure { exception ->
             when(exception){
                 is RuntimeException -> Log.e("RuntimeException",exception.message.toString())
@@ -43,7 +43,7 @@ class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : E
 
     override suspend fun checkExistProduct(productId: String): Boolean {
         return runCatching {
-            eMarketDbService.dbDao().checkExistProduct(productId = productId)
+            eMarketDbService.favoriteDao().checkExistProduct(productId = productId)
         }.onFailure { exception ->
             when(exception){
                 is RuntimeException -> Log.e("RuntimeException",exception.message.toString())

@@ -1,10 +1,9 @@
 package com.emarket.emarketcompose.presentation.detail
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
-import com.emarket.emarketcompose.domain.usecase.db.FavoriteUseCase
+import com.emarket.emarketcompose.domain.usecase.local.FavoriteUseCase
 import com.emarket.emarketcompose.presentation.base_viewmodel.FavoriteBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,9 +26,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun favoriteButtonAction(
-        eMarketItem: EMarketItem
-    ){
+    fun favoriteButtonAction(eMarketItem: EMarketItem){
         if (isFavorite.value) {
             removeFromFavorite(eMarketItem = eMarketItem)
             isFavorite.value = false
@@ -37,5 +34,9 @@ class DetailViewModel @Inject constructor(
             addToFavorite(eMarketItem = eMarketItem)
             isFavorite.value = true
         }
+    }
+
+    fun addToCard(products: EMarketItem) = viewModelScope.launch (Dispatchers.IO){
+        favoriteUseCase.addToCard(products = products)
     }
 }

@@ -3,8 +3,10 @@ package com.emarket.emarketcompose.di
 import android.content.Context
 import androidx.room.Room
 import com.emarket.emarketcompose.data.db.EMarketDb
+import com.emarket.emarketcompose.data.repository.local.EMarketBasketRepositoryImpl
 import com.emarket.emarketcompose.data.repository.local.EMarketFavoriteRepositoryImpl
-import com.emarket.emarketcompose.domain.usecase.db.FavoriteUseCase
+import com.emarket.emarketcompose.domain.usecase.local.BasketUseCase
+import com.emarket.emarketcompose.domain.usecase.local.FavoriteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +16,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DbModule {
+object LocalModule {
 
     @Singleton
     @Provides
@@ -25,7 +27,7 @@ object DbModule {
             .databaseBuilder(
                 context = context,
                 klass = EMarketDb::class.java,
-                name = "emarket.db1"
+                name = "emarket.db2"
             )
             .fallbackToDestructiveMigration()
             .allowMainThreadQueries()
@@ -43,8 +45,28 @@ object DbModule {
     @Singleton
     @Provides
     fun provideEMarketFavoriteUseCase(
-        eMarketFavoriteRepositoryImpl: EMarketFavoriteRepositoryImpl
-    ) : FavoriteUseCase{
-        return FavoriteUseCase(eMarketFavoriteRepositoryImpl = eMarketFavoriteRepositoryImpl)
+        eMarketFavoriteRepositoryImpl: EMarketFavoriteRepositoryImpl,
+        basketUseCase: BasketUseCase
+    ): FavoriteUseCase {
+        return FavoriteUseCase(
+            eMarketFavoriteRepositoryImpl = eMarketFavoriteRepositoryImpl,
+            basketUseCase = basketUseCase
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideEMarketBasketRepositoryImpl(
+        eMarketDb: EMarketDb
+    ): EMarketBasketRepositoryImpl {
+        return EMarketBasketRepositoryImpl(marketDb = eMarketDb)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEMarketBasketUseCasee(
+        basketRepositoryImpl: EMarketBasketRepositoryImpl
+    ): BasketUseCase {
+        return BasketUseCase(basketRepository = basketRepositoryImpl)
     }
 }

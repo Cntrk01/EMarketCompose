@@ -20,7 +20,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.emarket.emarketcompose.R
@@ -45,7 +44,7 @@ fun FavoritePage(
             ) {
                 Box {
                     AsyncImage(
-                        modifier = Modifier.height(250.dp),
+                        modifier = Modifier.height(dimensionResource(id = R.dimen._150dp)),
                         model = favoriteItems[favorite].image,
                         contentDescription = "image",
                         contentScale = ContentScale.Crop

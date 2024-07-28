@@ -3,9 +3,9 @@ package com.emarket.emarketcompose.di
 import android.app.Application
 import com.emarket.emarketcompose.data.repository.local.EMarketSplashScreenRepositoryImpl
 import com.emarket.emarketcompose.domain.repository.local.EMarketRepository
-import com.emarket.emarketcompose.domain.usecase.app_entry.ManageAppEntryUseCase
-import com.emarket.emarketcompose.domain.usecase.app_entry.ReadAppEntry
-import com.emarket.emarketcompose.domain.usecase.app_entry.SaveAppEntry
+import com.emarket.emarketcompose.domain.usecase.splash_screen.ManageAppEntryUseCase
+import com.emarket.emarketcompose.domain.usecase.splash_screen.ReadAppEntry
+import com.emarket.emarketcompose.domain.usecase.splash_screen.SaveAppEntry
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ReadAndWriteModule {
+object SplashScreenModule {
 
     @Singleton
     @Provides

@@ -3,7 +3,7 @@ package com.emarket.emarketcompose.presentation.base_viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
-import com.emarket.emarketcompose.domain.usecase.db.FavoriteUseCase
+import com.emarket.emarketcompose.domain.usecase.local.FavoriteUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow

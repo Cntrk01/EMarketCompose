@@ -45,7 +45,7 @@ class EMarketHomeCardKtTest {
                 description = "Home",
                 clickDetail = {},
                 clickFavorite = {},
-                clickButton = {}
+                clickAddToCardButton = {}
             )
         }
         composeTestRule.onNodeWithText("Home").isDisplayed()
@@ -67,7 +67,7 @@ class EMarketHomeCardKtTest {
                 clickFavorite = {
                     clickFavoriteButtonValue = true
                 },
-                clickButton = {
+                clickAddToCardButton = {
                     clickButtonValue = true
                 }
             )
@@ -108,7 +108,7 @@ class EMarketHomeCardKtTest {
                 clickFavorite = {
                     isShowStar = !isShowStar
                 },
-                clickButton = {},
+                clickAddToCardButton = {},
                 isShowStar = isShowStar
             )
         }
