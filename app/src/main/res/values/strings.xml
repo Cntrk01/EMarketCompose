@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">EMarketCompose</string>
     <string name="add_to_card">Add to Card</string>
+    <string name="complete_order">Complete Order</string>
 </resources>

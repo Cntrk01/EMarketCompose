@@ -31,15 +31,16 @@ class BasketUseCase @Inject constructor(
 
     suspend fun deleteProductFromBasket(productId: String) {
         val checkProduct = getProductById(productId = productId)
-        if (checkProduct?.productId?.isNotEmpty() == true){
-            if (checkProduct.productId == productId) {
-                if (checkProduct.productCount > 0){
-                    basketRepository.updateProductQuantity(basketId = productId, count = checkProduct.productCount - 1)
-                }
 
+        checkProduct?.let { product ->
+            if (product.productCount > 0) {
+                val newCount = product.productCount - 1
+                if (newCount > 0) {
+                    basketRepository.updateProductQuantity(basketId = productId, count = newCount)
+                } else {
+                    basketRepository.deleteProductInBasket(productId = productId)
+                }
             }
-        }else{
-            basketRepository.deleteProductInBasket(productId = productId)
         }
     }
 
