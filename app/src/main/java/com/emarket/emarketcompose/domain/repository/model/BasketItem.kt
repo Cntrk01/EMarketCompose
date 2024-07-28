@@ -6,13 +6,15 @@ import androidx.room.Entity
 data class BasketItem(
     val productId : String,
     val productName : String,
-    val productCount : Int
+    val productCount : Int,
+    val productPrice : String
 )
 
 fun EMarketItem.toBasketItem () : BasketItem{
     return BasketItem(
         productId = this.itemId,
         productName = this.name,
-        productCount = 1
+        productCount = 1,
+        productPrice = this.price
     )
 }

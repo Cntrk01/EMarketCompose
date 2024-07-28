@@ -7,7 +7,7 @@ import com.emarket.emarketcompose.domain.repository.model.BasketItem
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 
 @Database(entities = [(EMarketItem::class), (BasketItem::class)],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(FilterItemConventers::class)
