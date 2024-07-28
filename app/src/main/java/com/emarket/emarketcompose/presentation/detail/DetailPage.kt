@@ -122,7 +122,7 @@ fun DetailPage(
                     .fillMaxWidth(),
                 text = stringResource(R.string.add_to_card),
                 clickButton = {
-                    clickAddToCardButton(eMarketItem)
+                    detailViewModel.addToCard(products = eMarketItem)
                 }
             )
         }

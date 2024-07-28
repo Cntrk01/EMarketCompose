@@ -1,6 +1,5 @@
-package com.emarket.emarketcompose.domain.usecase.data_list
+package com.emarket.emarketcompose.domain.usecase.remote
 
-import android.util.Log
 import com.emarket.emarketcompose.data.repository.remote.EMarketRemoteRepositoryImpl
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem

@@ -1,33 +1,28 @@
 package com.emarket.emarketcompose.presentation.home
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
-import com.emarket.emarketcompose.domain.usecase.data_list.DataListUseCase
-import com.emarket.emarketcompose.domain.usecase.db.FavoriteUseCase
+import com.emarket.emarketcompose.domain.usecase.remote.DataListUseCase
+import com.emarket.emarketcompose.domain.usecase.local.FavoriteUseCase
 import com.emarket.emarketcompose.presentation.base_viewmodel.FavoriteBaseViewModel
-import com.emarket.emarketcompose.presentation.favorite.FavoriteViewModel
 import com.emarket.emarketcompose.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val dataListUseCase: DataListUseCase,
-    private val favoriteUseCase: FavoriteUseCase
+    private val favoriteUseCase: FavoriteUseCase,
 ) : FavoriteBaseViewModel(favoriteUseCase = favoriteUseCase) {
 
     private var maxDataListSize = 0
@@ -166,5 +161,9 @@ class HomeViewModel @Inject constructor(
         updatedMap[product.itemId] = itemStatus
         _addProducts.value = updatedMap
         //}
+    }
+
+    fun addToCardProduct(product: EMarketItem) = viewModelScope.launch (Dispatchers.IO){
+        favoriteUseCase.addToCard(products = product)
     }
 }

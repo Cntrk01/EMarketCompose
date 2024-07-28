@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.domain.usecase.app_entry
+package com.emarket.emarketcompose.domain.usecase.splash_screen
 
 import javax.inject.Inject
 
