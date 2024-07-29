@@ -2,6 +2,7 @@ package com.emarket.emarketcompose.presentation.base_viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,14 +30,13 @@ abstract class BaseViewModel<
     val effect get() = _effect?.receiveAsFlow()
 
     init {
-        _effect = Channel()
         subscribeToEvents()
     }
 
     fun getCurrentState() = state.value
 
-    fun setEvent(event: Event) {
-        viewModelScope.launch { _event.emit(event) }
+    fun setEvent(event: Event) = viewModelScope.launch(Dispatchers.IO) {
+        _event.emit(event)
     }
 
     protected fun setState(reducer: State.() -> State) {
@@ -44,19 +44,19 @@ abstract class BaseViewModel<
         _state.value = newState
     }
 
-    private fun subscribeToEvents() {
-        viewModelScope.launch {
-            _event.collect {
-                handleEvents(it)
-            }
+    private fun subscribeToEvents() = viewModelScope.launch(Dispatchers.IO) {
+        _event.collect {
+            handleEvents(it)
         }
     }
-
+    
     abstract fun handleEvents(event: Event)
 
     protected fun setEffect(builder: () -> Effect) {
         val effectValue = builder()
-        viewModelScope.launch { _effect?.send(effectValue) }
+        viewModelScope.launch(Dispatchers.IO) {
+            _effect?.send(effectValue)
+        }
     }
 
     fun closeEffectChannel() {
