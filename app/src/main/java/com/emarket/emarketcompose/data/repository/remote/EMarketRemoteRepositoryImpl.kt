@@ -17,6 +17,8 @@ class EMarketRemoteRepositoryImpl @Inject constructor(
     private val remoteApi: EMarketService
 ) : EMarketRemoteRepository {
 
+    private var filterList = listOf<FilterItem>()
+
     override suspend fun getData(
         totalPageItem: Int,
         listSize: (Int) -> Unit,
@@ -24,16 +26,17 @@ class EMarketRemoteRepositoryImpl @Inject constructor(
     ): Flow<Response<List<EMarketItem>>> {
         return flow {
             try {
+
                 val fetchData = remoteApi
                     .getMarketData()
                     .map { it.toEMarketItem() }
 
-                if (totalPageItem>1){
-
-                }else{
+                if (totalPageItem<1){
                     val fetchFilterList = remoteApi
                         .getMarketData()
                         .map { it.toFilterItem() }
+
+                    this@EMarketRemoteRepositoryImpl.filterList = fetchFilterList
 
                     filterList(fetchFilterList)
                 }
