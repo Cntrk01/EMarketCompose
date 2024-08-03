@@ -87,7 +87,7 @@ fun HomePage(
                         text = "Filters",
                         clickButton = {
                             clickFilter(
-                                homeDataList?.map { it.filterItem } ?: emptyList()
+                                filterList?.filter { (it.model.isNotEmpty() && it.brand.isNotEmpty()) } ?: emptyList()
                             )
                         }
                     )
