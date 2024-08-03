@@ -30,7 +30,7 @@ class DataListUseCase @Inject constructor(
                     item.brand to item.model
                 }
 
-                filterList(uniqueFilteredList.toMutableList())
+                filterList(uniqueFilteredList)
             })
 
         return responseFlow
