@@ -10,11 +10,14 @@ import com.emarket.emarketcompose.utils.Constants
 import com.emarket.emarketcompose.utils.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okhttp3.internal.filterList
 import javax.inject.Inject
 
 class EMarketRemoteRepositoryImpl @Inject constructor(
     private val remoteApi: EMarketService
 ) : EMarketRemoteRepository {
+
+    private var filterList = listOf<FilterItem>()
 
     override suspend fun getData(
         totalPageItem: Int,
@@ -23,16 +26,23 @@ class EMarketRemoteRepositoryImpl @Inject constructor(
     ): Flow<Response<List<EMarketItem>>> {
         return flow {
             try {
+
                 val fetchData = remoteApi
                     .getMarketData()
                     .map { it.toEMarketItem() }
 
+                if (totalPageItem<1){
+                    val fetchFilterList = remoteApi
+                        .getMarketData()
+                        .map { it.toFilterItem() }
+
+                    this@EMarketRemoteRepositoryImpl.filterList = fetchFilterList
+
+                    filterList(fetchFilterList)
+                }
+
                 val totalDataSize = fetchData.size
                 listSize(totalDataSize)
-
-                filterList(remoteApi
-                    .getMarketData()
-                    .map { it.toFilterItem() })
 
                 val endIndex = minOf(totalPageItem + Constants.PAGE_SIZE, totalDataSize)
 

@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
 
     private var pageIndex = 0
     private var cacheHomeDataList = listOf<EMarketItem>()
-    private var filteredList = mutableListOf<FilterItem>()
+    private var filteredList = listOf<FilterItem>()
 
     private var _addProducts: MutableState<Map<String, Boolean>> = mutableStateOf(emptyMap())
     val listenerAddProducts: State<Map<String, Boolean>> = _addProducts
@@ -55,7 +55,7 @@ class HomeViewModel @Inject constructor(
                 pageIndex = pageIndex,
                 listSize = { maxDataListSize = it },
                 filterList = {
-                    filteredList = it.toMutableList()
+                    filteredList = it
                 }
             ).collect { response ->
                 when (response) {
@@ -90,8 +90,6 @@ class HomeViewModel @Inject constructor(
                             )
                         }
                         isLoadingMoreData = false
-                        println(cacheHomeDataList.size)
-
 //Bu şekilde bir kullanım sağladığımda yeni nesne üretim eşitlediği için ekran sürekli
 //recompositiona ugruyordu fakat ben var olan statemi update ederek yanlızca olan değişiklikleri aktarmış oldum !!
 //                        _homeDataState.value=HomeState(
@@ -120,10 +118,6 @@ class HomeViewModel @Inject constructor(
                     homeSearchList = null
                 )
             } else {
-
-                //if (cacheHomeDataList.isEmpty()) {
-                //                    _homeDataState.value.homeDataList?.let { cacheHomeDataList = it }
-                //                }
 
                 val searchItem = cacheHomeDataList.filter { item ->
                     item.name.contains(query, ignoreCase = true) ||
