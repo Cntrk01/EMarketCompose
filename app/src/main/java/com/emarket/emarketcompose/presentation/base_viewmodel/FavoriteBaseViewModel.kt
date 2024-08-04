@@ -18,24 +18,21 @@ abstract class FavoriteBaseViewModel(
     private val _favoriteList = MutableStateFlow<List<EMarketItem>>(emptyList())
     val favoriteList: StateFlow<List<EMarketItem>> get() = _favoriteList
 
-    internal fun refreshFavorites() = viewModelScope.launch {
-        val list = withContext(Dispatchers.IO) {
-            favoriteUseCase.getFavoriteList()
-        }
+    internal fun refreshFavorites() = viewModelScope.launch(Dispatchers.IO) {
+        val list = favoriteUseCase.getFavoriteList()
+
         _favoriteList.value = list
     }
 
-    internal fun removeFromFavorite(eMarketItem: EMarketItem) = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            favoriteUseCase.deleteProducts(eMarketItem)
-        }
+    internal fun removeFromFavorite(eMarketItem: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
+        favoriteUseCase.deleteProducts(eMarketItem)
+
         refreshFavorites()
     }
 
-    internal fun addToFavorite(eMarketItem: EMarketItem) = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            favoriteUseCase.addProducts(eMarketItem)
-        }
+    internal fun addToFavorite(eMarketItem: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
+        favoriteUseCase.addProducts(eMarketItem)
+
         refreshFavorites()
     }
 
