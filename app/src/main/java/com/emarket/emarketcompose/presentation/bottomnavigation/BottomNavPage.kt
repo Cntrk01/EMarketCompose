@@ -100,12 +100,7 @@ fun BottomNavPage() {
             startDestination = NavigationState.Home.route
         ) {
             composable(route = NavigationState.Home.route) {
-                val homeViewModel: HomeViewModel = hiltViewModel()
-                val state = homeViewModel.homeDataState
-
                 HomePage(
-                    homeState = state,
-                    viewModel = homeViewModel,
                     clickDetail = {
                         navigateToDetails(
                             navController = navController,
