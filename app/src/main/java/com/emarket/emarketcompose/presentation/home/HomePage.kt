@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.button.EMarketButton
@@ -31,14 +32,12 @@ import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.utils.getScreenWidthInDp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun HomePage(
-    homeState: StateFlow<HomeState>,
-    viewModel: HomeViewModel,
+    viewModel: HomeViewModel = hiltViewModel(),
     clickDetail: (EMarketItem) -> Unit,
     clickFilter: (List<FilterItem>) -> Unit,
 ) {
@@ -47,6 +46,7 @@ fun HomePage(
     val isSearching = remember { false }
     var dataState by remember { mutableStateOf(HomeState()) }
     var searchText by rememberSaveable { mutableStateOf("") }
+    val homeState = viewModel.homeDataState
 
     DisposableEffect(homeState) {
         val job = viewModel.viewModelScope.launch(Dispatchers.IO) {
@@ -75,10 +75,10 @@ fun HomePage(
                         text = searchText,
                         onValueChange = {
                             searchText = it
-                            viewModel.searchItem(it)
+                            viewModel.onEvent(HomeEvent.SearchItem(query = it))
                         },
                         onSearch = {
-                            viewModel.searchItem(searchText)
+                            viewModel.onEvent(HomeEvent.SearchItem(query = searchText))
                         }
                     )
 
@@ -170,10 +170,10 @@ fun HomeItemLayout(
                 itemContent = { index ->
                     //homeDataListSize != homeDataList.size eşit olmadığı sürece load işlemi yapcaz. Eşit olduktan sonra tekrar yaparsa ekran boş gözüküyor
                     if (index == homeDataList.size - 1 && homeDataListSize != homeDataList.size) {
-                        viewModel.loadMoreDataList()
+                        viewModel.onEvent(HomeEvent.LoadData)
                     }
 
-                    viewModel.updateProductStatus(product = homeDataList[index])
+                    viewModel.onEvent(event = HomeEvent.UpdateProductStatus(item = homeDataList[index]))
 
                     val productStatus = listenerProducts[homeDataList[index].itemId] ?: false
 
@@ -183,10 +183,10 @@ fun HomeItemLayout(
                         price = homeDataList[index].price,
                         description = homeDataList[index].name,
                         clickAddToCardButton = {
-                            viewModel.addToCardProduct(homeDataList[index])
+                            viewModel.onEvent(event = HomeEvent.AddToCart(item = homeDataList[index]))
                         },
                         clickFavorite = {
-                            viewModel.checkProducts(product = homeDataList[index])
+                            viewModel.onEvent(event = HomeEvent.CheckProduct(item = homeDataList[index]))
                         },
                         clickDetail = {
                             clickDetail(homeDataList[index])

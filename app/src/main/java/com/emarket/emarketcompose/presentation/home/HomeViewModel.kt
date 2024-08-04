@@ -12,7 +12,9 @@ import com.emarket.emarketcompose.presentation.base_viewmodel.FavoriteBaseViewMo
 import com.emarket.emarketcompose.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,10 +35,14 @@ class HomeViewModel @Inject constructor(
     private var cacheHomeDataList = listOf<EMarketItem>()
     private var filteredList = listOf<FilterItem>()
 
-    private var _addProducts: MutableState<Map<String, Boolean>> = mutableStateOf(emptyMap())
+    private var _addProducts= mutableStateOf(emptyMap<String, Boolean>())
     val listenerAddProducts: State<Map<String, Boolean>> = _addProducts
 
     private var isLoadingMoreData = false
+
+    //Tıklama durumlarını ilgili composable ifadesine bildirmek için kullanabilriz.
+    private val _events = MutableSharedFlow<HomeEvent>()
+    val events: SharedFlow<HomeEvent> = _events
 
     //Güncellemelerin senkronize edilmesi sağlanır, böylece aynı anda birden fazla erişim olmasını önler.
     //Kodda hangi durumlarda eş zamanlı erişim sorunlarıyla karşılaşabileceğini belirlemekle ilgilidir.
@@ -49,6 +55,33 @@ class HomeViewModel @Inject constructor(
         getDataList(pageIndex = pageIndex)
     }
 
+    fun onEvent(event: HomeEvent) {
+        when (event) {
+            HomeEvent.LoadData -> loadMoreDataList()
+
+            is HomeEvent.SearchItem -> searchItem(query = event.query)
+
+            is HomeEvent.FilterItems -> {
+                viewModelScope.launch (Dispatchers.IO){
+                    updateFilters(event.filters)
+                    _events.emit(event)
+                }
+            }
+
+            is HomeEvent.ClickDetail -> {
+                viewModelScope.launch {
+                    _events.emit(event)
+                }
+            }
+
+            is HomeEvent.AddToCart -> addToCardProduct(product = event.item)
+
+            is HomeEvent.CheckProduct -> checkProducts(product = event.item)
+
+            is HomeEvent.UpdateProductStatus -> updateProductStatus(product = event.item)
+        }
+    }
+
     private fun getDataList(pageIndex: Int) = viewModelScope.launch(Dispatchers.IO) {
         dataListUseCase
             .getData(
@@ -59,37 +92,19 @@ class HomeViewModel @Inject constructor(
                 }
             ).collect { response ->
                 when (response) {
-
-                    is Response.Loading -> {
-                        _homeDataState.update { state ->
-                            state.copy(
-                                homeLoading = true,
-                            )
-                        }
-                    }
-
-                    is Response.Error -> {
-                        _homeDataState.update { state ->
-                            state.copy(
-                                homeLoading = false,
-                                homeError = response.message.toString()
-                            )
-                        }
-                    }
-
+                    is Response.Loading -> _homeDataState.update { it.copy(homeLoading = true) }
+                    is Response.Error -> _homeDataState.update { it.copy(homeLoading = false, homeError = response.message.toString()) }
                     is Response.Success -> {
-                        cacheHomeDataList += response.data ?: emptyList()
-
-                        _homeDataState.update { state ->
-                            state.copy(
-                                homeLoading = false,
-                                homeError = "",
-                                homeDataList = cacheHomeDataList,
-                                homeDataListSize = maxDataListSize,
-                                filterList = filteredList
-                            )
-                        }
+                        cacheHomeDataList += response.data.orEmpty()
+                        _homeDataState.update { it.copy(
+                            homeLoading = false,
+                            homeError = "",
+                            homeDataList = cacheHomeDataList,
+                            homeDataListSize = maxDataListSize,
+                            filterList = filteredList
+                        )}
                         isLoadingMoreData = false
+                    }
 //Bu şekilde bir kullanım sağladığımda yeni nesne üretim eşitlediği için ekran sürekli
 //recompositiona ugruyordu fakat ben var olan statemi update ederek yanlızca olan değişiklikleri aktarmış oldum !!
 //                        _homeDataState.value=HomeState(
@@ -100,64 +115,52 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             }
-    }
+
 
     //isLoadingMoreData ile loading işlemi yaptığım kısımdan birden çok istek geldiği için burada tek 1 kez çalışmasını sağlayan bir yapı kurdum
-    fun loadMoreDataList() {
+    private fun loadMoreDataList() {
         if (isLoadingMoreData) return
         isLoadingMoreData = true
         pageIndex += 1
         getDataList(pageIndex = pageIndex)
     }
 
-    fun searchItem(query: String) {
+    private fun searchItem(query: String) {
         _homeDataState.update { currentState ->
-            if (query.isEmpty()) {
-                currentState.copy(
-                    homeDataList = cacheHomeDataList,
-                    homeSearchList = null
-                )
-            } else {
-
-                val searchItem = cacheHomeDataList.filter { item ->
-                    item.name.contains(query, ignoreCase = true) ||
-                            item.description.contains(query, ignoreCase = true)
-                }
-
-                currentState.copy(
-                    homeSearchList = searchItem,
-                    homeDataList = null
-                )
+            val filteredData = if (query.isEmpty()) cacheHomeDataList else cacheHomeDataList.filter {
+                it.name.contains(query, ignoreCase = true) || it.description.contains(query, ignoreCase = true)
             }
+
+            currentState.copy(
+                homeSearchList = filteredData.takeIf { query.isNotEmpty() },
+                homeDataList = cacheHomeDataList.takeIf { query.isEmpty() }
+            )
         }
     }
 
-    fun checkProducts(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
+    private fun updateFilters(filters: List<FilterItem>) {
+        _homeDataState.update { it.copy(filterList = filters) }
+    }
+
+    private fun checkProducts(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
         //withLock fonksiyonu, kilidi otomatik olarak serbest bırakır, böylece kilidi serbest bırakmayı unutma gibi hatalardan kaçınılır.
         //productStatusMutex.withLock {
-        val itemStatus = checkProduct(product.itemId)
-        val updatedMap = _addProducts.value.toMutableMap()
-        if (itemStatus) {
-            updatedMap[product.itemId] = false
-            removeFromFavorite(product)
-        } else {
-            updatedMap[product.itemId] = true
-            addToFavorite(product)
+        val isFavorite = checkProduct(product.itemId)
+        _addProducts.value = _addProducts.value.toMutableMap().apply {
+            this[product.itemId] = !isFavorite
         }
-        _addProducts.value = updatedMap
+        if (isFavorite) removeFromFavorite(product) else addToFavorite(product)
         //}
     }
 
-    fun updateProductStatus(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
+    private fun updateProductStatus(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
         //productStatusMutex.withLock {
         val itemStatus = checkProduct(product.itemId)
-        val updatedMap = _addProducts.value.toMutableMap()
-        updatedMap[product.itemId] = itemStatus
-        _addProducts.value = updatedMap
+        _addProducts.value = _addProducts.value.toMutableMap().apply { this[product.itemId] = itemStatus }
         //}
     }
 
-    fun addToCardProduct(product: EMarketItem) = viewModelScope.launch (Dispatchers.IO){
+    private fun addToCardProduct(product: EMarketItem) = viewModelScope.launch (Dispatchers.IO){
         favoriteUseCase.addToCard(products = product)
     }
 }
