@@ -49,7 +49,8 @@ class EMarketRemoteRepositoryImpl @Inject constructor(
                 if (totalPageItem < endIndex) {
                     val filteredData = fetchData.subList(totalPageItem, endIndex)
                     emit(Response.Success(data = filteredData))
-                } else {
+                }
+                else {
                     emit(Response.Error("No more data available"))
                 }
             } catch (e: Exception) {
