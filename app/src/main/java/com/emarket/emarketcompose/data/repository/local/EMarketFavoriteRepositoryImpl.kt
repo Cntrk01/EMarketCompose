@@ -11,8 +11,9 @@ class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : E
             eMarketDbService.favoriteDao().getProducts()
         }.onFailure { exception ->
             when(exception){
+                is IllegalStateException -> Log.e("IllegalStateException",exception.message.toString())
+                is NullPointerException -> Log.e("NullPointerException",exception.message.toString())
                 is RuntimeException -> Log.e("RuntimeException",exception.message.toString())
-                is Exception -> Log.e("Exception",exception.message.toString())
             }
         }.getOrElse {
             emptyList()
@@ -24,8 +25,8 @@ class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : E
             eMarketDbService.favoriteDao().addProducts(products)
         }.onFailure { exception ->
             when(exception){
+                is NullPointerException -> Log.e("NullPointerException",exception.message.toString())
                 is RuntimeException -> Log.e("RuntimeException",exception.message.toString())
-                is Exception -> Log.e("Exception",exception.message.toString())
             }
         }
     }
@@ -35,8 +36,8 @@ class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : E
             eMarketDbService.favoriteDao().deleteProducts(productId = productId)
         }.onFailure { exception ->
             when(exception){
+                is NullPointerException -> Log.e("NullPointerException",exception.message.toString())
                 is RuntimeException -> Log.e("RuntimeException",exception.message.toString())
-                is Exception -> Log.e("Exception",exception.message.toString())
             }
         }
     }
@@ -46,8 +47,8 @@ class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : E
             eMarketDbService.favoriteDao().checkExistProduct(productId = productId)
         }.onFailure { exception ->
             when(exception){
+                is NullPointerException -> Log.e("NullPointerException",exception.message.toString())
                 is RuntimeException -> Log.e("RuntimeException",exception.message.toString())
-                is Exception -> Log.e("Exception",exception.message.toString())
             }
         }.getOrDefault(false)
     }

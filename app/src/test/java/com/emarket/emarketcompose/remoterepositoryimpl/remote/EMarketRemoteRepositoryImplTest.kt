@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.remoterepositoryimpl
+package com.emarket.emarketcompose.remoterepositoryimpl.remote
 
 import com.emarket.emarketcompose.data.dto.EMarketResponse
 import com.emarket.emarketcompose.data.dto.EMarketResponseItem
