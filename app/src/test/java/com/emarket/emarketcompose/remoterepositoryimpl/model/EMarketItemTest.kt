@@ -1,6 +1,7 @@
 package com.emarket.emarketcompose.remoterepositoryimpl.model
 
 import com.emarket.emarketcompose.data.dto.EMarketResponseItem
+import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.domain.repository.model.toEMarketItem
 import com.emarket.emarketcompose.domain.repository.model.toFilterItem
 import junit.framework.TestCase.assertEquals
@@ -51,5 +52,26 @@ class EMarketItemTest {
         assertEquals("item_description", eMarketItem.description)
         assertEquals("model", eMarketItem.filterItem.model)
         assertEquals("brand", eMarketItem.filterItem.brand)
+    }
+
+    @Test
+    fun `test FilterItem`(){
+        val responseItem = EMarketResponseItem(
+            brand = "brand",
+            createdAt = "12.06",
+            description = "item_description",
+            id = "123",
+            image = "image_url",
+            model = "model",
+            name = "item_name",
+            price = "123"
+        )
+
+        val filter = FilterItem(brand = "brand", model = "model")
+
+        val filterItem = responseItem.toFilterItem()
+
+        assertEquals(filter.model, filterItem.model)
+        assertEquals(filter.brand, filterItem.brand)
     }
 }
