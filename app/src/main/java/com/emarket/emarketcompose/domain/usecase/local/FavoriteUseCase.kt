@@ -1,15 +1,16 @@
 package com.emarket.emarketcompose.domain.usecase.local
 
-import com.emarket.emarketcompose.data.repository.local.EMarketFavoriteRepositoryImpl
+import com.emarket.emarketcompose.data.remote.EMarketFavoriteRepository
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.toBasketItem
 import javax.inject.Inject
 
 class FavoriteUseCase @Inject constructor(
-    private val eMarketFavoriteRepositoryImpl: EMarketFavoriteRepositoryImpl,
+    private val eMarketFavoriteRepositoryImpl: EMarketFavoriteRepository,
     private val basketUseCase: BasketUseCase
 ) {
     fun getFavoriteList() = eMarketFavoriteRepositoryImpl.getProducts()
+
     suspend fun addProducts(products: EMarketItem) =
         eMarketFavoriteRepositoryImpl.addProducts(products)
 
@@ -21,5 +22,4 @@ class FavoriteUseCase @Inject constructor(
 
     suspend fun addToCard(products: EMarketItem) =
         basketUseCase.addProductInBasket(products.toBasketItem())
-
 }

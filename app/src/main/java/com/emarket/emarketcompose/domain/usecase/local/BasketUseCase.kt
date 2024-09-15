@@ -1,12 +1,11 @@
 package com.emarket.emarketcompose.domain.usecase.local
 
-import androidx.lifecycle.LiveData
-import com.emarket.emarketcompose.data.repository.local.EMarketBasketRepositoryImpl
+import com.emarket.emarketcompose.data.remote.EMarketBasketRepository
 import com.emarket.emarketcompose.domain.repository.model.BasketItem
 import javax.inject.Inject
 
 class BasketUseCase @Inject constructor(
-    private val basketRepository: EMarketBasketRepositoryImpl
+    private val basketRepository: EMarketBasketRepository
 ) {
 
     fun getAllBasket(): List<BasketItem> {

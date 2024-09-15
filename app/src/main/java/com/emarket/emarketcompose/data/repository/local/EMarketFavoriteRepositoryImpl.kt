@@ -4,8 +4,11 @@ import android.util.Log
 import com.emarket.emarketcompose.data.db.EMarketDb
 import com.emarket.emarketcompose.data.remote.EMarketFavoriteRepository
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
+import javax.inject.Inject
 
-class EMarketFavoriteRepositoryImpl(private val eMarketDbService: EMarketDb) : EMarketFavoriteRepository {
+class EMarketFavoriteRepositoryImpl @Inject constructor(private val eMarketDbService: EMarketDb)
+    : EMarketFavoriteRepository {
+
     override fun getProducts(): List<EMarketItem> {
         return runCatching {
             eMarketDbService.favoriteDao().getProducts()
