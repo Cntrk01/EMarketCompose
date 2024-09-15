@@ -27,13 +27,11 @@ class HomeViewModel @Inject constructor(
     private val favoriteUseCase: FavoriteUseCase,
 ) : FavoriteBaseViewModel(favoriteUseCase = favoriteUseCase) {
 
-    private var maxDataListSize = 0
     private val _homeDataState = MutableStateFlow(HomeState())
     val homeDataState: StateFlow<HomeState> get() = _homeDataState
 
-    private var pageIndex = 0
+    private var pageIndex = 1
     private var cacheHomeDataList = listOf<EMarketItem>()
-    private var filteredList = listOf<FilterItem>()
 
     private var _addProducts= mutableStateOf(emptyMap<String, Boolean>())
     val listenerAddProducts: State<Map<String, Boolean>> = _addProducts
@@ -63,7 +61,7 @@ class HomeViewModel @Inject constructor(
 
             is HomeEvent.FilterItems -> {
                 viewModelScope.launch (Dispatchers.IO){
-                    updateFilters(event.filters)
+                    //updateFilters(event.filters)
                     _events.emit(event)
                 }
             }
@@ -86,10 +84,6 @@ class HomeViewModel @Inject constructor(
         dataListUseCase
             .getData(
                 pageIndex = pageIndex,
-                listSize = { maxDataListSize = it },
-                filterList = {
-                    filteredList = it
-                }
             ).collect { response ->
                 when (response) {
                     is Response.Loading -> _homeDataState.update { it.copy(homeLoading = true) }
@@ -100,8 +94,6 @@ class HomeViewModel @Inject constructor(
                             homeLoading = false,
                             homeError = "",
                             homeDataList = cacheHomeDataList,
-                            homeDataListSize = maxDataListSize,
-                            filterList = filteredList
                         )}
                         isLoadingMoreData = false
                     }
@@ -138,9 +130,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateFilters(filters: List<FilterItem>) {
-        _homeDataState.update { it.copy(filterList = filters) }
-    }
+//    private fun updateFilters(filters: List<FilterItem>) {
+//        _homeDataState.update { it.copy(filterList = filters) }
+//    }
 
     private fun checkProducts(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
         //withLock fonksiyonu, kilidi otomatik olarak serbest bırakır, böylece kilidi serbest bırakmayı unutma gibi hatalardan kaçınılır.

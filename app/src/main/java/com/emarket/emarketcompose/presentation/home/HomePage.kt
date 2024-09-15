@@ -86,9 +86,9 @@ fun HomePage(
                         modifier = Modifier.align(Alignment.End),
                         text = "Filters",
                         clickButton = {
-                            clickFilter(
-                                filterList?.filter { (it.model.isNotEmpty() && it.brand.isNotEmpty()) } ?: emptyList()
-                            )
+                            //clickFilter(
+                            //filterList?.filter { (it.model.isNotEmpty() && it.brand.isNotEmpty()) } ?: emptyList()
+                            //)
                         }
                     )
                 }
@@ -109,14 +109,13 @@ fun HomePage(
                     }
 
                     homeDataList?.isNotEmpty() == true && !isSearching -> {
-
                         Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._2dp)))
 
                         //LazyVerticalStaggeredGrid de kullanabilirim.
                         //Fakat ben düzenli gözükmesini istiyorum ondan bunu kullandım.
                         HomeItemLayout(
                             homeDataList = homeDataList!!,
-                            homeDataListSize = homeDataListSize,
+                            //homeDataListSize = homeDataListSize,
                             viewModel = viewModel,
                             clickDetail = {
                                 clickDetail(it)
@@ -128,7 +127,7 @@ fun HomePage(
 
                         HomeItemLayout(
                             homeDataList = homeSearchList!!,
-                            homeDataListSize = homeSearchList!!.size,
+                            //homeDataListSize = homeSearchList!!.size,
                             viewModel = viewModel,
                             clickDetail = {
                                 clickDetail(it)
@@ -141,22 +140,9 @@ fun HomePage(
     }
 }
 
-//@Composable
-//fun <T> LiveData<T>.observeAsState(initial: T? = null): State<T?> {
-//    val lifecycleOwner = LocalLifecycleOwner.current
-//    val state = remember { mutableStateOf(initial) }
-//    DisposableEffect(this, lifecycleOwner) {
-//        val observer = Observer<T> { value -> state.value = value }
-//        observe(lifecycleOwner, observer)
-//        onDispose { removeObserver(observer) }
-//    }
-//    return state
-//}
-
 @Composable
 fun HomeItemLayout(
     homeDataList: List<EMarketItem>,
-    homeDataListSize: Int,
     viewModel: HomeViewModel,
     clickDetail: (EMarketItem) -> Unit,
 ) {
@@ -169,7 +155,7 @@ fun HomeItemLayout(
                 count = homeDataList.size,
                 itemContent = { index ->
                     //homeDataListSize != homeDataList.size eşit olmadığı sürece load işlemi yapcaz. Eşit olduktan sonra tekrar yaparsa ekran boş gözüküyor
-                    if (index == homeDataList.size - 1 && homeDataListSize != homeDataList.size) {
+                    if (index == homeDataList.size - 1) {
                         viewModel.onEvent(HomeEvent.LoadData)
                     }
 
@@ -196,11 +182,11 @@ fun HomeItemLayout(
                 }
             )
 
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                if (homeDataList.size < homeDataListSize) {
-                    EMarketLoading(modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen._10dp)))
-                }
-            }
+            // item(span = { GridItemSpan(maxLineSpan) }) {
+            //                if (homeDataList.size < homeDataListSize) {
+            //                    EMarketLoading(modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen._10dp)))
+            //                }
+            //            }
         }
     )
 }

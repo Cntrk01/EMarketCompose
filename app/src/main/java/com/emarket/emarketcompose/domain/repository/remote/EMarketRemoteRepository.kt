@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface EMarketRemoteRepository {
     suspend fun getData(
-        totalPageItem: Int, listSize: (Int) -> Unit,
-        filterList: (List<FilterItem>) -> Unit
+        pageIndex: Int,
     ): Flow<Response<List<EMarketItem>>>
 }
