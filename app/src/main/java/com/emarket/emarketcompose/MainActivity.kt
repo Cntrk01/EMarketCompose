@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             EMarketComposeTheme {
 
-                setThemeColor()
+                SetThemeColor()
 
                     val navigationController = rememberNavController()
                     val routeStatus = onBoardingViewModel.startDestination
@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun setThemeColor(){
+private fun SetThemeColor(){
     val isSystemInDarkMode = isSystemInDarkTheme()
     val systemController = rememberSystemUiController()
     val systemTheme = if (isSystemInDarkMode)

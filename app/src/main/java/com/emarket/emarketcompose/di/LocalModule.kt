@@ -3,6 +3,8 @@ package com.emarket.emarketcompose.di
 import android.content.Context
 import androidx.room.Room
 import com.emarket.emarketcompose.data.db.EMarketDb
+import com.emarket.emarketcompose.data.remote.EMarketBasketRepository
+import com.emarket.emarketcompose.data.remote.EMarketFavoriteRepository
 import com.emarket.emarketcompose.data.repository.local.EMarketBasketRepositoryImpl
 import com.emarket.emarketcompose.data.repository.local.EMarketFavoriteRepositoryImpl
 import com.emarket.emarketcompose.domain.usecase.local.BasketUseCase
@@ -38,7 +40,7 @@ object LocalModule {
     @Provides
     fun provideEMarketFavoriteRepositoryImpl(
         eMarketDb: EMarketDb
-    ): EMarketFavoriteRepositoryImpl {
+    ): EMarketFavoriteRepository {
         return EMarketFavoriteRepositoryImpl(eMarketDbService = eMarketDb)
     }
 
@@ -58,7 +60,7 @@ object LocalModule {
     @Provides
     fun provideEMarketBasketRepositoryImpl(
         eMarketDb: EMarketDb
-    ): EMarketBasketRepositoryImpl {
+    ): EMarketBasketRepository {
         return EMarketBasketRepositoryImpl(marketDb = eMarketDb)
     }
 

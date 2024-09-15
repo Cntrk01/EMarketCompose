@@ -21,7 +21,7 @@ fun OnBoarding(
     val pagerState = rememberPagerState {
         onBoardingPages.size
     }
-    //Fakat derivedStateOf ile currentPage durumunda değişiklik olduğunda çalıştırılacak böylelikle gereksiz liste oluşumunu ve blok çalışması olmayacak.
+
     val buttonState = remember {
         derivedStateOf {
             when (pagerState.currentPage) {

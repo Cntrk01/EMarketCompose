@@ -2,6 +2,7 @@ package com.emarket.emarketcompose.di
 
 import com.emarket.emarketcompose.data.remote.EMarketService
 import com.emarket.emarketcompose.data.repository.remote.EMarketRemoteRepositoryImpl
+import com.emarket.emarketcompose.domain.repository.remote.EMarketRemoteRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,7 +32,7 @@ object ServiceModule {
     @Singleton
     fun provideEMarketRepositoryImpl(
         remoteApi : EMarketService
-    ) : EMarketRemoteRepositoryImpl{
+    ) : EMarketRemoteRepository{
         return EMarketRemoteRepositoryImpl(remoteApi = remoteApi)
     }
 }
