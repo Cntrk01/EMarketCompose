@@ -11,4 +11,10 @@ interface EMarketService {
         @Query("limit") limit: Int,
         @Query("page") page: Int
     ) : EMarketResponse
+
+    @GET("products")
+    suspend fun searchMarketData(
+        @Query("search") query: String
+    ) : EMarketResponse
+
 }

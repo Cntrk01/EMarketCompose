@@ -16,4 +16,11 @@ class DataListUseCase @Inject constructor(
         val responseFlow = eMarketRemoteRepositoryImpl.getData(pageIndex = pageIndex)
         return responseFlow
     }
+
+    suspend fun searchData(
+        query: String,
+    ): Flow<Response<List<EMarketItem>>> {
+        val responseFlow = eMarketRemoteRepositoryImpl.searchData(query = query)
+        return responseFlow
+    }
 }
