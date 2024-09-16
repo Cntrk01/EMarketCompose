@@ -31,9 +31,6 @@ class HomeViewModel @Inject constructor(
     private var _addProducts = mutableStateOf(emptyMap<String, Boolean>())
     val listenerAddProducts: State<Map<String, Boolean>> = _addProducts
 
-    private var isLoadingMoreData = false
-
-
     //Tıklama durumlarını ilgili composable ifadesine bildirmek için kullanabilriz.
     //private val _events = MutableSharedFlow<HomeEvent>()
     //val events: SharedFlow<HomeEvent> = _events
@@ -96,9 +93,9 @@ class HomeViewModel @Inject constructor(
                                 homeLoading = false,
                                 homeError = "",
                                 homeDataList = cacheHomeDataList,
+                                isLoadingMoreItem = false
                             )
                         }
-                        isLoadingMoreData = false
                         pageIndexx++
                     }
                     //Bu şekilde bir kullanım sağladığımda yeni nesne üretim eşitlediği için ekran sürekli
@@ -112,10 +109,10 @@ class HomeViewModel @Inject constructor(
             }
     }
 
-    //isLoadingMoreData ile loading işlemi yaptığım kısımdan birden çok istek geldiği için burada tek 1 kez çalışmasını sağlayan bir yapı kurdum
+    //isLoadingMoreItem ile loading işlemi yaptığım kısımdan birden çok istek geldiği için burada tek 1 kez çalışmasını sağlayan bir yapı kurdum
     private fun loadMoreDataList() {
-        if (isLoadingMoreData) return
-        isLoadingMoreData = true
+        if (_homeDataState.value.isLoadingMoreItem) return
+        _homeDataState.value.isLoadingMoreItem = true
         pageIndexx += 1
         getDataList(pageIndex = pageIndexx)
     }
@@ -127,6 +124,7 @@ class HomeViewModel @Inject constructor(
                     homeLoading = false,
                     homeError = "",
                     homeSearchList = emptyList(),
+                    homeDataList = cacheHomeDataList
                 )
             }
         }
