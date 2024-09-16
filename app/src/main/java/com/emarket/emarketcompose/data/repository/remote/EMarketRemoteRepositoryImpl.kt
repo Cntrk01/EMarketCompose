@@ -19,7 +19,18 @@ class EMarketRemoteRepositoryImpl @Inject constructor(
     ): Flow<Response<List<EMarketItem>>> {
         return flow {
             try {
-                val fetchData = apiService.getMarketData(10,pageIndex).map { it.toEMarketItem() }
+                val fetchData = apiService.getMarketData(10, pageIndex).map { it.toEMarketItem() }
+                emit(Response.Success(data = fetchData))
+            } catch (e: Exception) {
+                emit(Response.Error("Failed to fetch data: ${e.message}"))
+            }
+        }
+    }
+
+    override suspend fun searchData(query: String): Flow<Response<List<EMarketItem>>> {
+        return flow {
+            try {
+                val fetchData = apiService.searchMarketData(query).map { it.toEMarketItem() }
                 emit(Response.Success(data = fetchData))
             } catch (e: Exception) {
                 emit(Response.Error("Failed to fetch data: ${e.message}"))

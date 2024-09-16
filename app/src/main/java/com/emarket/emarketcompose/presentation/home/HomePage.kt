@@ -7,10 +7,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.R
 import com.emarket.emarketcompose.components.button.EMarketButton
 import com.emarket.emarketcompose.components.home_card.EMarketHomeCard
@@ -31,8 +29,6 @@ import com.emarket.emarketcompose.components.text.EMarketText
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.utils.getScreenWidthInDp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -43,21 +39,19 @@ fun HomePage(
 ) {
     var firstLoadings = remember { true }
     val checkFirstLoading = remember { derivedStateOf { firstLoadings } }
-    val isSearching = remember { false }
-    var dataState by remember { mutableStateOf(HomeState()) }
     var searchText by rememberSaveable { mutableStateOf("") }
-    val homeState = viewModel.homeDataState
+    val homeState = viewModel.homeDataState.collectAsState()
 
-    DisposableEffect(homeState) {
-        val job = viewModel.viewModelScope.launch(Dispatchers.IO) {
-            homeState.collect { value ->
-                dataState = value
-            }
-        }
-        onDispose {
-            job.cancel()
-        }
-    }
+//    DisposableEffect(homeState) {
+//        val job = viewModel.viewModelScope.launch(Dispatchers.IO) {
+//            homeState.collect { value ->
+//                dataState = value
+//            }
+//        }
+//        onDispose {
+//            job.cancel()
+//        }
+//    }
 
     Column {
         Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._10dp)))
@@ -69,7 +63,7 @@ fun HomePage(
             )
         ) {
 
-            dataState.apply {
+            homeState.value.apply {
                 if (!homeLoading) {
                     EMarketSearch(
                         text = searchText,
@@ -104,34 +98,35 @@ fun HomePage(
                         firstLoadings = false
                     }
 
+                    homeLoading ->{
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            EMarketLoading()
+                        }
+                    }
+
                     homeError.isNotEmpty() -> {
                         EMarketText(text = homeError)
                     }
 
-                    homeDataList?.isNotEmpty() == true && !isSearching -> {
-                        Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._2dp)))
-
-                        //LazyVerticalStaggeredGrid de kullanabilirim.
-                        //Fakat ben düzenli gözükmesini istiyorum ondan bunu kullandım.
+                    homeSearchList?.isNotEmpty() == true -> {
                         HomeItemLayout(
-                            homeDataList = homeDataList!!,
-                            //homeDataListSize = homeDataListSize,
+                            homeDataList = homeSearchList!!,
                             viewModel = viewModel,
-                            clickDetail = {
-                                clickDetail(it)
-                            },
+                            clickDetail = clickDetail
                         )
                     }
 
-                    homeSearchList?.isNotEmpty() == true -> {
+                    homeDataList?.isNotEmpty() == true -> {
+                        Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._2dp)))
 
                         HomeItemLayout(
-                            homeDataList = homeSearchList!!,
-                            //homeDataListSize = homeSearchList!!.size,
+                            homeDataList = homeDataList!!,
                             viewModel = viewModel,
-                            clickDetail = {
-                                clickDetail(it)
-                            },
+                            clickDetail = clickDetail
                         )
                     }
                 }
@@ -154,7 +149,7 @@ fun HomeItemLayout(
             items(
                 count = homeDataList.size,
                 itemContent = { index ->
-                    //homeDataListSize != homeDataList.size eşit olmadığı sürece load işlemi yapcaz. Eşit olduktan sonra tekrar yaparsa ekran boş gözüküyor
+
                     if (index == homeDataList.size - 1) {
                         viewModel.onEvent(HomeEvent.LoadData)
                     }
@@ -181,12 +176,6 @@ fun HomeItemLayout(
                     )
                 }
             )
-
-            // item(span = { GridItemSpan(maxLineSpan) }) {
-            //                if (homeDataList.size < homeDataListSize) {
-            //                    EMarketLoading(modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen._10dp)))
-            //                }
-            //            }
         }
     )
 }
