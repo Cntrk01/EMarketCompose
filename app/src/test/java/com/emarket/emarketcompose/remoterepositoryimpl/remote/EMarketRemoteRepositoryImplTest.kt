@@ -65,15 +65,15 @@ class EMarketRemoteRepositoryImplTest {
         val totalPageItem =
             fakeEMarketItems.size // Bu durumda, toplam sayfa öğesi mevcut veri sayısına eşit
 
-        // Mock the remoteApi to return our fake data
+        //Mock sahte api isteği atıyormuş gibi yaparak bizim verdiğimiz fake veriyi döndürür.
         whenever(mockApi.getMarketData()).thenReturn(fakeEMarketResponse)
 
         // Call getData and collect the results
         val resultFlow = mockRepository.getData(totalPageItem, { _ -> }, { _ -> })
-        // val result = resultFlow.first() yapmıştım. Burada şöyle birşey oluştu akış bitip blok kapandığında en son bu kontrol ettiğim erroru atıyor ve exception yiyoruz.
+        //val result = resultFlow.first() yapmıştım. Burada şöyle birşey oluştu akış bitip blok kapandığında en son bu kontrol ettiğim erroru atıyor ve exception yiyoruz.
         //Flow was aborted, no more elements needed, but then emission attempt of value 'com.emarket.emarketcompose.utils.Response$Error@1698d7c0' has been detected.
-        //    Emissions from 'catch' blocks are prohibited in order to avoid unspecified behaviour, 'Flow.catch' operator can be used instead.
-        //    For a more detailed explanation, please refer to Flow documentation. bundan dolayı bizim değerleri burada toplamamız gerekli.
+        //Emissions from 'catch' blocks are prohibited in order to avoid unspecified behaviour, 'Flow.catch' operator can be used instead.
+        //For a more detailed explanation, please refer to Flow documentation. bundan dolayı bizim değerleri burada toplamamız gerekli.
         resultFlow.collect {
             assert(it is Response.Error)
             assert((it as Response.Error).message == "No more data available")

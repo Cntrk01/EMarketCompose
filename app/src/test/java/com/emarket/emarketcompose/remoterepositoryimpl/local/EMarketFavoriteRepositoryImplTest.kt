@@ -58,11 +58,8 @@ class EMarketFavoriteRepositoryImplTest {
 
     @Test
     fun `test getProducts`() {
-        whenever(
-            mockApi.favoriteDao().getProducts()
-        ).thenReturn(mockEMarketList) //çağrıldığında, mockApi.favoriteDao().getProducts() metodunu çağırır ve bu da mockEMarketList listesini döndürür.
-        val result =
-            mockRepository.getProducts() //yukarıda fake olarak tanımladığımız listeyi alıp getirecek.
+        whenever(mockApi.favoriteDao().getProducts()).thenReturn(mockEMarketList) //çağrıldığında, mockApi.favoriteDao().getProducts() metodunu çağırır ve bu da mockEMarketList listesini döndürür.
+        val result = mockRepository.getProducts() //yukarıda fake olarak tanımladığımız listeyi alıp getirecek.
         assert(result == mockEMarketList)
     }
 
