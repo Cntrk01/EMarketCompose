@@ -62,7 +62,6 @@ fun HomePage(
                 end = dimensionResource(id = R.dimen._10dp)
             )
         ) {
-
             homeState.value.apply {
                 if (!homeLoading) {
                     EMarketSearch(
@@ -150,7 +149,7 @@ fun HomeItemLayout(
                 count = homeDataList.size,
                 itemContent = { index ->
 
-                    if (index == homeDataList.size - 1) {
+                    if (index == homeDataList.size - 1 && !viewModel.homeDataState.value.isLoadingMoreItem) {
                         viewModel.onEvent(HomeEvent.LoadData)
                     }
 
