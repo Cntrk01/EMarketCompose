@@ -14,6 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.navigations.NavigationState
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
+import java.io.IOException
 
 @Composable
 fun dimensionResourceSp(id: Int): TextUnit {
@@ -70,4 +75,29 @@ fun navigateToDetails(navController: NavController, eMarketItem: EMarketItem) {
     navController.navigate(
         route = NavigationState.Detail.route
     )
+}
+
+fun <T> handleFlowWithError(
+    body: suspend () -> T, // İş mantığını çalıştıracak
+    exceptionLamb: suspend (Exception) -> Unit
+): Flow<Response<T>> = flow {
+    try {
+        val result = body() // İş mantığını çağırıp sonucu alıyoruz
+        emit(Response.Success(data = result)) // Başarılı sonucu emit ediyoruz
+    } catch (e: Exception) {
+        when (e) {
+            is IOException -> {
+                emit(Response.Error("Network error occurred: Please check your internet connection."))
+            }
+            is HttpException -> {
+                emit(Response.Error("HTTP error: ${e.code()} - ${e.message()}"))
+            }
+            is TimeoutCancellationException -> {
+                emit(Response.Error("Request timed out: ${e.message}"))
+            }
+            else -> {
+                emit(Response.Error("An unexpected error occurred: ${e.message}"))
+            }
+        }
+    }
 }
