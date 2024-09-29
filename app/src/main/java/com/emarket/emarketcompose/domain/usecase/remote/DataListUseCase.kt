@@ -10,10 +10,11 @@ import javax.inject.Inject
 class DataListUseCase @Inject constructor(
     private val eMarketRemoteRepositoryImpl: EMarketRemoteRepository
 ) {
-    suspend fun getData(
-        pageIndex: Int,
-    ): Flow<Response<List<EMarketItem>>> {
-        val responseFlow = eMarketRemoteRepositoryImpl.getData(pageIndex = pageIndex)
+    private var lastPage = 1
+
+    suspend fun getData(): Flow<Response<List<EMarketItem>>> {
+        val responseFlow = eMarketRemoteRepositoryImpl.getData(pageIndex = lastPage)
+        lastPage++
         return responseFlow
     }
 

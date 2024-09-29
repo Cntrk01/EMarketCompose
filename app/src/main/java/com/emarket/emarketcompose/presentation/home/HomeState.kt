@@ -8,5 +8,5 @@ data class HomeState(
     val homeLoading : Boolean = true,
     var homeDataList : List<EMarketItem> ?= null,
     var homeSearchList : List<EMarketItem> ?= null,
-    var isLoadingMoreItem : Boolean = false,
+    var isSearch : Boolean = false,
 )

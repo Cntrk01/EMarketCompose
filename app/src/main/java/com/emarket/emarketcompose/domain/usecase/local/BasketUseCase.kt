@@ -12,7 +12,7 @@ class BasketUseCase @Inject constructor(
         return basketRepository.getAllBasket()
     }
 
-    suspend fun getProductById(productId: String): BasketItem? {
+    private suspend fun getProductById(productId: String): BasketItem? {
         return basketRepository.getProductById(productId = productId)
     }
 

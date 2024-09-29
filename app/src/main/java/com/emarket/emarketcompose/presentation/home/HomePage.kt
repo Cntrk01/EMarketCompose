@@ -39,19 +39,7 @@ fun HomePage(
 ) {
     var firstLoadings = remember { true }
     val checkFirstLoading = remember { derivedStateOf { firstLoadings } }
-    var searchText by rememberSaveable { mutableStateOf("") }
     val homeState = viewModel.homeDataState.collectAsState()
-
-//    DisposableEffect(homeState) {
-//        val job = viewModel.viewModelScope.launch(Dispatchers.IO) {
-//            homeState.collect { value ->
-//                dataState = value
-//            }
-//        }
-//        onDispose {
-//            job.cancel()
-//        }
-//    }
 
     Column {
         Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen._10dp)))
@@ -63,48 +51,19 @@ fun HomePage(
             )
         ) {
             homeState.value.apply {
-                if (!homeLoading) {
-                    EMarketSearch(
-                        text = searchText,
-                        onValueChange = {
-                            searchText = it
-                            viewModel.onEvent(HomeEvent.SearchItem(query = it))
-                        },
-                        onSearch = {
-                            viewModel.onEvent(HomeEvent.SearchItem(query = searchText))
-                        }
-                    )
-
-                    EMarketButton(
-                        modifier = Modifier.align(Alignment.End),
-                        text = "Filters",
-                        clickButton = {
-                            //clickFilter(
-                            //filterList?.filter { (it.model.isNotEmpty() && it.brand.isNotEmpty()) } ?: emptyList()
-                            //)
-                        }
-                    )
-                }
+                SearchItem(
+                    homeLoading = homeLoading,
+                    viewModel = viewModel
+                )
                 when {
                     homeLoading && checkFirstLoading.value -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            EMarketLoading()
+                        FirstLoading {
+                            firstLoadings = it
                         }
-                        firstLoadings = false
                     }
 
-                    homeLoading ->{
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            EMarketLoading()
-                        }
+                    homeLoading -> {
+                        Loading()
                     }
 
                     homeError.isNotEmpty() -> {
@@ -115,7 +74,8 @@ fun HomePage(
                         HomeItemLayout(
                             homeDataList = homeSearchList!!,
                             viewModel = viewModel,
-                            clickDetail = clickDetail
+                            clickDetail = clickDetail,
+                            isSearch = isSearch
                         )
                     }
 
@@ -125,7 +85,8 @@ fun HomePage(
                         HomeItemLayout(
                             homeDataList = homeDataList!!,
                             viewModel = viewModel,
-                            clickDetail = clickDetail
+                            clickDetail = clickDetail,
+                            isSearch = isSearch
                         )
                     }
                 }
@@ -135,10 +96,70 @@ fun HomePage(
 }
 
 @Composable
-fun HomeItemLayout(
+internal fun SearchItem(
+    homeLoading: Boolean,
+    viewModel: HomeViewModel,
+) {
+    var searchText by remember {
+        mutableStateOf("")
+    }
+    if (!homeLoading) {
+        Column {
+            EMarketSearch(
+                text = searchText,
+                onValueChange = {
+                    searchText = it
+                    viewModel.onEvent(HomeEvent.SearchItem(query = it))
+                },
+                onSearch = {
+                    viewModel.onEvent(HomeEvent.SearchItem(query = searchText))
+                },
+            )
+
+            EMarketButton(
+                modifier = Modifier.align(Alignment.End),
+                text = "Filters",
+                clickButton = {
+                    //clickFilter(
+                    //filterList?.filter { (it.model.isNotEmpty() && it.brand.isNotEmpty()) } ?: emptyList()
+                    //)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+internal fun FirstLoading(
+    firstLoading: (Boolean) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        EMarketLoading()
+    }
+    firstLoading(false)
+}
+
+@Composable
+internal fun Loading() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        EMarketLoading()
+    }
+}
+
+@Composable
+internal fun HomeItemLayout(
     homeDataList: List<EMarketItem>,
     viewModel: HomeViewModel,
     clickDetail: (EMarketItem) -> Unit,
+    isSearch: Boolean,
 ) {
     val listenerProducts = viewModel.listenerAddProducts.value
 
@@ -148,8 +169,7 @@ fun HomeItemLayout(
             items(
                 count = homeDataList.size,
                 itemContent = { index ->
-
-                    if (index == homeDataList.size - 1 && !viewModel.homeDataState.value.isLoadingMoreItem) {
+                    if (index == homeDataList.size - 1 && !isSearch) {
                         viewModel.onEvent(HomeEvent.LoadData)
                     }
 
@@ -175,6 +195,12 @@ fun HomeItemLayout(
                     )
                 }
             )
+
+            //item(span = { GridItemSpan(maxLineSpan) }) {
+            //  if (homeDataList.size != 74) {
+            //      EMarketLoading(modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen._10dp)))
+            //  }
+            //}
         }
     )
 }

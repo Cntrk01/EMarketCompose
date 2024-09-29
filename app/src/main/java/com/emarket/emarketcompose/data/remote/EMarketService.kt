@@ -16,5 +16,4 @@ interface EMarketService {
     suspend fun searchMarketData(
         @Query("search") query: String
     ) : EMarketResponse
-
 }

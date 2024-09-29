@@ -4,14 +4,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
-import com.emarket.emarketcompose.domain.usecase.remote.DataListUseCase
 import com.emarket.emarketcompose.domain.usecase.local.FavoriteUseCase
+import com.emarket.emarketcompose.domain.usecase.remote.DataListUseCase
 import com.emarket.emarketcompose.presentation.base_viewmodel.FavoriteBaseViewModel
 import com.emarket.emarketcompose.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,31 +26,23 @@ class HomeViewModel @Inject constructor(
     private val _homeDataState = MutableStateFlow(HomeState())
     val homeDataState: StateFlow<HomeState> get() = _homeDataState
 
-    private var pageIndexx = 1
     private var cacheHomeDataList = listOf<EMarketItem>()
 
     private var _addProducts = mutableStateOf(emptyMap<String, Boolean>())
     val listenerAddProducts: State<Map<String, Boolean>> = _addProducts
 
-    //Tıklama durumlarını ilgili composable ifadesine bildirmek için kullanabilriz.
-    //private val _events = MutableSharedFlow<HomeEvent>()
-    //val events: SharedFlow<HomeEvent> = _events
-
-    //Güncellemelerin senkronize edilmesi sağlanır, böylece aynı anda birden fazla erişim olmasını önler.
-    //Kodda hangi durumlarda eş zamanlı erişim sorunlarıyla karşılaşabileceğini belirlemekle ilgilidir.
-    // viewModelScope.launch içinde çalıştırılan fonksiyonlar zaten ana iş parçacığının dışında çalışır ve eğer _addProducts
-    // durumu başka iş parçacıkları tarafından aynı anda değiştirilirse veri tutarsızlığı sorunlarına yol açabilir.
-    // Ancak, Kotlin StateFlow ve MutableStateFlow zaten thread-safe yapılar olduğu için, ek bir Mutex kullanmak çoğu durumda gerekli olmayabilir.
-
-//private val productStatusMutex = Mutex()
+    private var hasMoreData = true
 
     init {
-        getDataList(pageIndex = pageIndexx)
+        getDataList()
     }
 
     fun onEvent(event: HomeEvent) {
         when (event) {
-            HomeEvent.LoadData -> loadMoreDataList()
+            HomeEvent.LoadData -> {
+                println("Calısıyor")
+                loadMoreDataList()
+            }
 
             is HomeEvent.SearchItem -> searchItem(query = event.query)
 
@@ -74,29 +67,36 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getDataList(pageIndex: Int) = viewModelScope.launch(Dispatchers.IO) {
+    private fun getDataList() = viewModelScope.launch(Dispatchers.IO) {
 
-        dataListUseCase.getData(pageIndex = pageIndex).collect { response ->
+        dataListUseCase.getData().collectLatest { response ->
                 when (response) {
                     is Response.Loading -> _homeDataState.update { it.copy(homeLoading = true) }
                     is Response.Error -> _homeDataState.update {
                         it.copy(
                             homeLoading = false,
-                            homeError = response.message.toString()
+                            homeError = response.message.toString(),
                         )
                     }
 
                     is Response.Success -> {
-                        cacheHomeDataList += response.data.orEmpty()
-                        _homeDataState.update {
-                            it.copy(
-                                homeLoading = false,
-                                homeError = "",
-                                homeDataList = cacheHomeDataList,
-                                isLoadingMoreItem = false
-                            )
+                        val newData = response.data.orEmpty()
+
+                        if (newData.isEmpty()) {
+                            // Eğer yeni veri gelmiyorsa daha fazla istek atmayı durdur
+                            hasMoreData = false
+                        } else {
+                            // Yeni veri varsa listeye ekle ve sayfayı güncelle
+                            cacheHomeDataList += newData
+
+                            _homeDataState.update {
+                                it.copy(
+                                    homeLoading = false,
+                                    homeError = "",
+                                    homeDataList = cacheHomeDataList
+                                )
+                            }
                         }
-                        pageIndexx++
                     }
                     //Bu şekilde bir kullanım sağladığımda yeni nesne üretim eşitlediği için ekran sürekli
                     //recompositiona ugruyordu fakat ben var olan statemi update ederek yanlızca olan değişiklikleri aktarmış oldum !!
@@ -109,12 +109,9 @@ class HomeViewModel @Inject constructor(
             }
     }
 
-    //isLoadingMoreItem ile loading işlemi yaptığım kısımdan birden çok istek geldiği için burada tek 1 kez çalışmasını sağlayan bir yapı kurdum
     private fun loadMoreDataList() {
-        if (_homeDataState.value.isLoadingMoreItem) return
-        _homeDataState.value.isLoadingMoreItem = true
-        pageIndexx += 1
-        getDataList(pageIndex = pageIndexx)
+        if (!hasMoreData) return // Eğer istek yapılmışsa veya daha fazla veri yoksa çık
+        getDataList()
     }
 
     private fun searchItem(query: String) = viewModelScope.launch(Dispatchers.IO) {
@@ -124,19 +121,20 @@ class HomeViewModel @Inject constructor(
                     homeLoading = false,
                     homeError = "",
                     homeSearchList = emptyList(),
-                    homeDataList = cacheHomeDataList
+                    isSearch = false
                 )
             }
         }
 
         dataListUseCase.searchData(query = query).collect { response ->
             when (response) {
-                is Response.Loading -> _homeDataState.update { it.copy(homeLoading = true) }
+                is Response.Loading -> _homeDataState.update { it.copy(isSearch = true,homeLoading = true) }
 
                 is Response.Error -> _homeDataState.update {
                     it.copy(
                         homeLoading = false,
-                        homeError = response.message.toString()
+                        homeError = response.message.toString(),
+                        isSearch = true
                     )
                 }
 
@@ -146,6 +144,7 @@ class HomeViewModel @Inject constructor(
                             homeLoading = false,
                             homeError = "",
                             homeSearchList = response.data,
+                            isSearch = true
                         )
                     }
                 }
@@ -154,22 +153,17 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun checkProducts(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
-        //withLock fonksiyonu, kilidi otomatik olarak serbest bırakır, böylece kilidi serbest bırakmayı unutma gibi hatalardan kaçınılır.
-        //productStatusMutex.withLock {
         val isFavorite = checkProduct(product.itemId)
         _addProducts.value = _addProducts.value.toMutableMap().apply {
             this[product.itemId] = !isFavorite
         }
         if (isFavorite) removeFromFavorite(product) else addToFavorite(product)
-        //}
     }
 
     private fun updateProductStatus(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
-        //productStatusMutex.withLock {
         val itemStatus = checkProduct(product.itemId)
         _addProducts.value =
             _addProducts.value.toMutableMap().apply { this[product.itemId] = itemStatus }
-        //}
     }
 
     private fun addToCardProduct(product: EMarketItem) = viewModelScope.launch(Dispatchers.IO) {
