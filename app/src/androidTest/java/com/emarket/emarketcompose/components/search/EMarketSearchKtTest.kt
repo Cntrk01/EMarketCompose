@@ -5,6 +5,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import com.emarket.emarketcompose.common.search.EMarketSearch
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

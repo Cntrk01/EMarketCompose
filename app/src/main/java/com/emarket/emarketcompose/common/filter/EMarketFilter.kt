@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.components.filter
+package com.emarket.emarketcompose.common.filter
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -22,7 +22,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 
 @SuppressLint("MutableCollectionMutableState")

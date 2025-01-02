@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.components.home_card
+package com.emarket.emarketcompose.common.home_card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.button.EMarketButton
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.button.EMarketButton
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 
 @Composable

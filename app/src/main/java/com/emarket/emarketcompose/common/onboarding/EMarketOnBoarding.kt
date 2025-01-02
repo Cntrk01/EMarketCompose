@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.components.onboarding
+package com.emarket.emarketcompose.common.onboarding
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -28,8 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.button.EMarketButton
-import com.emarket.emarketcompose.components.onboarding.indicator.EMarketIndicator
+import com.emarket.emarketcompose.common.button.EMarketButton
+import com.emarket.emarketcompose.common.onboarding.indicator.EMarketIndicator
 import com.emarket.emarketcompose.presentation.onboarding.OnBoardingPage
 import com.emarket.emarketcompose.presentation.onboarding.onBoardingPages
 import kotlinx.coroutines.CoroutineScope

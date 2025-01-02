@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.components.header
+package com.emarket.emarketcompose.common.header
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 import com.emarket.emarketcompose.utils.customClickable
 import com.emarket.emarketcompose.utils.dimensionResourceSp

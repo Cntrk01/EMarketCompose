@@ -21,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.button.EMarketButton
-import com.emarket.emarketcompose.components.home_card.EMarketHomeCard
-import com.emarket.emarketcompose.components.loading_status.EMarketLoading
-import com.emarket.emarketcompose.components.search.EMarketSearch
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.button.EMarketButton
+import com.emarket.emarketcompose.common.home_card.EMarketHomeCard
+import com.emarket.emarketcompose.common.loading_status.EMarketLoading
+import com.emarket.emarketcompose.common.search.EMarketSearch
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.utils.getScreenWidthInDp

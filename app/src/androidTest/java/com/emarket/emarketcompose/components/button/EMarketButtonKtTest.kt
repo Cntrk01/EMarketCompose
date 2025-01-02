@@ -27,7 +27,9 @@ class EMarketButtonKtTest {
 
         composeTestRule.setContent {
             EMarketComposeTheme {
-                EMarketButton(text = buttonText, clickButton = {})
+                com.emarket.emarketcompose.common.button.EMarketButton(
+                    text = buttonText,
+                    clickButton = {})
             }
         }
 
@@ -39,7 +41,7 @@ class EMarketButtonKtTest {
 
         composeTestRule.setContent {
             EMarketComposeTheme {
-                EMarketButton(
+                com.emarket.emarketcompose.common.button.EMarketButton(
                     text = buttonText,
                     clickButton = {}
                 )
@@ -58,9 +60,9 @@ class EMarketButtonKtTest {
 
         composeTestRule.setContent {
             EMarketComposeTheme {
-                EMarketButton(
+                com.emarket.emarketcompose.common.button.EMarketButton(
                     text = "Button",
-                    clickButton = { isClicked = true}
+                    clickButton = { isClicked = true }
                 )
             }
         }

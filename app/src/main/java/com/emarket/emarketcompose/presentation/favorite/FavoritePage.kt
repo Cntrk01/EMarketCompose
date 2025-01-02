@@ -23,7 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.text.EMarketText
 
 @Composable
 fun FavoritePage(

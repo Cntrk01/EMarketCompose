@@ -23,9 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.basket_item_row.EMarketBasketItemRow
-import com.emarket.emarketcompose.components.button.EMarketButton
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.basket_item_row.EMarketBasketItemRow
+import com.emarket.emarketcompose.common.button.EMarketButton
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.domain.repository.model.BasketItem
 
 @Composable

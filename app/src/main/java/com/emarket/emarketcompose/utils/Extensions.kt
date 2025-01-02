@@ -79,7 +79,6 @@ fun navigateToDetails(navController: NavController, eMarketItem: EMarketItem) {
 
 fun <T> handleFlowWithError(
     body: suspend () -> T, // İş mantığını çalıştıracak
-    exceptionLamb: suspend (Exception) -> Unit
 ): Flow<Response<T>> = flow {
     try {
         val result = body() // İş mantığını çağırıp sonucu alıyoruz
@@ -90,7 +89,8 @@ fun <T> handleFlowWithError(
                 emit(Response.Error("Network error occurred: Please check your internet connection."))
             }
             is HttpException -> {
-                emit(Response.Error("HTTP error: ${e.code()} - ${e.message()}"))
+                val errorBody = e.response()?.errorBody()?.string() ?: "Unknown error"
+                emit(Response.Error("HTTP error: ${e.code()} - $errorBody"))
             }
             is TimeoutCancellationException -> {
                 emit(Response.Error("Request timed out: ${e.message}"))

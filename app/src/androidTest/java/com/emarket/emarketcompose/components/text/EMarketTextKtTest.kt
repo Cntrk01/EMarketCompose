@@ -8,6 +8,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 import org.junit.Rule
 import org.junit.Test

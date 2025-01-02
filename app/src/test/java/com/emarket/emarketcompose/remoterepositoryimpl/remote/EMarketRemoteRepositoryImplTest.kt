@@ -7,14 +7,22 @@ import com.emarket.emarketcompose.data.repository.remote.EMarketRemoteRepository
 import com.emarket.emarketcompose.domain.repository.model.toEMarketItem
 import com.emarket.emarketcompose.domain.repository.model.toFilterItem
 import com.emarket.emarketcompose.utils.Response
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
+import junit.framework.TestCase.assertTrue
+import junit.framework.TestCase.fail
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import okhttp3.ResponseBody
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mockito
 import org.mockito.kotlin.whenever
+import retrofit2.HttpException
 
 @RunWith(JUnit4::class)
 class EMarketRemoteRepositoryImplTest {
@@ -30,8 +38,6 @@ class EMarketRemoteRepositoryImplTest {
 
     private val fakeEMarketItems = fakeEMarketResponseItems.map { it.toEMarketItem() }
 
-    private val fakeFilterItems = fakeEMarketResponseItems.map { it.toFilterItem() }
-
     private val fakeEMarketResponse = EMarketResponse().apply { addAll(fakeEMarketResponseItems) }
 
     @Before
@@ -41,18 +47,10 @@ class EMarketRemoteRepositoryImplTest {
 
     @Test
     fun `test getData with valid data and filterList`() = runTest {
-        val totalPageItem = 0
+        val page = 1
+        whenever(mockApi.getMarketData(limit = 10, page = page)).thenReturn(fakeEMarketResponse)
 
-        // Mock the remoteApi to return our fake data
-        whenever(mockApi.getMarketData()).thenReturn(fakeEMarketResponse)
-
-        // Call getData and collect the results
-        val resultFlow = mockRepository.getData(totalPageItem,
-            { size ->
-                assert(size == fakeEMarketItems.size)
-            }, { filters ->
-                assert(filters == fakeFilterItems)
-            })
+        val resultFlow = mockRepository.getData(pageIndex = page)
 
         resultFlow.collect {
             assert(it is Response.Success)
@@ -61,36 +59,38 @@ class EMarketRemoteRepositoryImplTest {
     }
 
     @Test
-    fun `test getData with no more data available`() = runTest {
-        val totalPageItem =
-            fakeEMarketItems.size // Bu durumda, toplam sayfa öğesi mevcut veri sayısına eşit
+    fun `searchData should return success response when API call is successful`() = runTest {
 
-        //Mock sahte api isteği atıyormuş gibi yaparak bizim verdiğimiz fake veriyi döndürür.
-        whenever(mockApi.getMarketData()).thenReturn(fakeEMarketResponse)
+        val query = "testQuery"
+        whenever(mockApi.searchMarketData(query)).thenReturn(fakeEMarketResponse)
 
-        // Call getData and collect the results
-        val resultFlow = mockRepository.getData(totalPageItem, { _ -> }, { _ -> })
-        //val result = resultFlow.first() yapmıştım. Burada şöyle birşey oluştu akış bitip blok kapandığında en son bu kontrol ettiğim erroru atıyor ve exception yiyoruz.
-        //Flow was aborted, no more elements needed, but then emission attempt of value 'com.emarket.emarketcompose.utils.Response$Error@1698d7c0' has been detected.
-        //Emissions from 'catch' blocks are prohibited in order to avoid unspecified behaviour, 'Flow.catch' operator can be used instead.
-        //For a more detailed explanation, please refer to Flow documentation. bundan dolayı bizim değerleri burada toplamamız gerekli.
-        resultFlow.collect {
-            assert(it is Response.Error)
-            assert((it as Response.Error).message == "No more data available")
+        val resultFlow = mockRepository.searchData(query)
+
+        resultFlow.collectLatest {
+            assert(it is Response.Success)
+            assert((it as Response.Success).data == fakeEMarketItems)
+
         }
     }
 
     @Test
-    fun `test getData with exception`() = runTest {
-        val totalPageItem = 0
+    fun `searchData should return error response when API call throws exception`() = runTest {
 
-        whenever(mockApi.getMarketData()).thenThrow(RuntimeException("API error"))
+        val query = "testQuery"
+        val exception = HttpException(
+            retrofit2.Response.error<Any>(500, ResponseBody.create(null, "Server Error"))
+        )
+        whenever(mockApi.searchMarketData(query)).thenThrow(exception)
 
-        val resultFlow = mockRepository.getData(totalPageItem, { _ -> }, { _ -> })
+        val resultFlow = mockRepository.searchData(query)
 
-        val result = resultFlow.first()
-
-        assert(result is Response.Error)
-        assert((result as Response.Error).message == "Failed to fetch data: API error")
+        //Exception için test yazıcam orda kullandığım yapının testini extensions diye bir paket açıp yapcam
+        resultFlow.collectLatest {
+            assert(it is Response.Error)
+            assertEquals(
+                "HTTP error: 500 - Server Error",
+                (it as Response.Error).message
+            )
+        }
     }
 }

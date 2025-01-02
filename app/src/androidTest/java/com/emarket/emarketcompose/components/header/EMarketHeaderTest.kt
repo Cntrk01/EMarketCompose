@@ -5,6 +5,8 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.emarket.emarketcompose.common.header.EMarketHeader
+import com.emarket.emarketcompose.common.header.HeaderType
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.components.basket_item_row
+package com.emarket.emarketcompose.common.basket_item_row
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,8 +12,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.button.EMarketButton
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.button.EMarketButton
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.utils.dimensionResourceSp
 
 @Composable

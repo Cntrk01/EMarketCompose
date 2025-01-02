@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.components.search
+package com.emarket.emarketcompose.common.search
 
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
@@ -29,7 +29,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.text.EMarketText
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

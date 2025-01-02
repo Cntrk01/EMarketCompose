@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.components.text
+package com.emarket.emarketcompose.common.text
 
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Text

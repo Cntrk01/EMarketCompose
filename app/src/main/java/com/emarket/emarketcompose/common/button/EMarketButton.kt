@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.components.button
+package com.emarket.emarketcompose.common.button
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 
 @Composable

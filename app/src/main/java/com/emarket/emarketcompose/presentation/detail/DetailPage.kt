@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.button.EMarketButton
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.button.EMarketButton
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.domain.repository.model.EMarketItem
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme

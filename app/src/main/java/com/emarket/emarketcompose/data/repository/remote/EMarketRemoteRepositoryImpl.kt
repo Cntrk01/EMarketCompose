@@ -20,7 +20,6 @@ class EMarketRemoteRepositoryImpl @Inject constructor(
             body = {
                 apiService.getMarketData(10, pageIndex).map { it.toEMarketItem() }
             },
-            exceptionLamb = { e -> }
         )
     }
 
@@ -29,7 +28,6 @@ class EMarketRemoteRepositoryImpl @Inject constructor(
             body = {
                 apiService.searchMarketData(query).map { it.toEMarketItem() }
             },
-            exceptionLamb = { e -> }
         )
     }
 }

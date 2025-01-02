@@ -23,10 +23,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.filter.EMarketFilter
-import com.emarket.emarketcompose.components.filter.FilterType
-import com.emarket.emarketcompose.components.search.EMarketSearch
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.filter.EMarketFilter
+import com.emarket.emarketcompose.common.filter.FilterType
+import com.emarket.emarketcompose.common.search.EMarketSearch
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.domain.repository.model.FilterItem
 import com.emarket.emarketcompose.ui.theme.EMarketComposeTheme
 import com.emarket.emarketcompose.utils.Constants

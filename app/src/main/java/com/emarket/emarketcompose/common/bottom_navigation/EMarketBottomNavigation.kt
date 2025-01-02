@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.components.bottom_navigation
+package com.emarket.emarketcompose.common.bottom_navigation
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -22,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.emarket.emarketcompose.R
-import com.emarket.emarketcompose.components.text.EMarketText
+import com.emarket.emarketcompose.common.text.EMarketText
 import com.emarket.emarketcompose.utils.customClickable
 import com.emarket.emarketcompose.utils.dimensionResourceSp
 

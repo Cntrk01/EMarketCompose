@@ -5,7 +5,7 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.emarket.emarketcompose.components.basket_item_row.EMarketBasketItemRow
+import com.emarket.emarketcompose.common.basket_item_row.EMarketBasketItemRow
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

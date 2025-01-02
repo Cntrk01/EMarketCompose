@@ -1,4 +1,4 @@
-package com.emarket.emarketcompose.components.onboarding.indicator
+package com.emarket.emarketcompose.common.onboarding.indicator
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background

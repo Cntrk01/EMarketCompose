@@ -5,7 +5,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import com.emarket.emarketcompose.components.loading_status.EMarketLoading
+import com.emarket.emarketcompose.common.loading_status.EMarketLoading
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
